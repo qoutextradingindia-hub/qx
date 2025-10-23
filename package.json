@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "cd client && npm install && npm run build",
+    "dev": "npm start",
+    "client": "cd client && npm start"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
