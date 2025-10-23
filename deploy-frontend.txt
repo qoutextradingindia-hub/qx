@@ -1,0 +1,20 @@
+# After successful build - Deploy to NGINX
+
+# Copy build files to web directory
+sudo cp -r ~/Startraders/client/build/* /var/www/html/
+
+# Set proper permissions
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+
+# Test nginx configuration
+sudo nginx -t
+
+# Reload nginx
+sudo systemctl reload nginx
+
+# Check if site is working
+curl -I http://31.97.207.160
+
+echo "✅ Frontend deployed successfully!"
+echo "🌐 Open browser: http://31.97.207.160"

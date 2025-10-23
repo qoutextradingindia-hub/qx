@@ -1,0 +1,33 @@
+/* Team.css */
+
+.team-container {
+  padding: 20px;
+  background-color: transparent;
+  min-height: 100vh;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+.team-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.team-card {
+  background-color: #0b132b;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.team-icon {
+  margin-right: 10px;
+  color: #f5c518;
+}

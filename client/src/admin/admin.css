@@ -1,0 +1,30 @@
+
+/* Admin CSS */
+.admin-login {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.admin-login h2 {
+  color: #fff;
+}
+
+.admin-login input {
+  padding: 10px;
+  margin: 10px;
+  width: 250px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #1e1e2f;
+  color: white;
+}
+
+.admin-login button {
+  padding: 10px 30px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}

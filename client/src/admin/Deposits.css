@@ -1,0 +1,47 @@
+.deposit-container {
+  background-color: transparent;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.deposit-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.deposit-table th,
+.deposit-table td {
+  border: 1px solid #333;
+  padding: 10px;
+  text-align: center;
+}
+
+.deposit-table th {
+  background-color: #1c1c3b;
+  color: #ffd700;
+}
+
+.deposit-table tr:nth-child(even) {
+  background-color: #1a1a2e;
+}
+
+.deposit-table tr:nth-child(odd) {
+  background-color: #111122;
+}
+
+button {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #666;
+}

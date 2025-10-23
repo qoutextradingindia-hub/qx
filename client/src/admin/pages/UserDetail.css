@@ -1,0 +1,98 @@
+
+.user-details-container {
+  padding: 30px;
+  color: #ffffff;
+  background-color: #111827;
+  border-radius: 10px;
+}
+
+.user-details-heading {
+  color: #00d1ff;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.user-info p {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.amount {
+  color: #00ffff;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.user-actions {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.transfer-btn {
+  background: #1f2937;
+  border: 1px solid #00ffff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.ban-btn {
+  background: #ff0000;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+}
+
+.boosting-section {
+  margin: 20px 0;
+}
+
+.boost-bar {
+  height: 10px;
+  background: transparent;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.countdown {
+  color: #00ffff;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-content {
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 300px;
+}
+
+.popup-content input, .popup-content select {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-between;
+}

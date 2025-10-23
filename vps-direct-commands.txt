@@ -1,0 +1,53 @@
+# Direct VPS Setup Commands
+# These commands run ONLY in VPS SSH terminal, not Windows terminal
+
+# Method 1: Direct download and run
+wget https://raw.githubusercontent.com/luckyparihar3111-crypto/Startraders/main/complete-vps-setup.sh -O setup.sh
+chmod +x setup.sh
+./setup.sh
+
+# Method 2: If wget doesn't work, use curl
+curl -o setup.sh https://raw.githubusercontent.com/luckyparihar3111-crypto/Startraders/main/complete-vps-setup.sh
+chmod +x setup.sh
+./setup.sh
+
+# Method 3: Manual paste (if download fails)
+nano setup.sh
+# Then paste the entire script content and save (Ctrl+X, Y, Enter)
+chmod +x setup.sh
+./setup.sh
+
+# Method 4: Step by step manual setup
+# If script doesn't work, run these individual commands:
+
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install tools
+sudo apt install -y git nginx certbot python3-certbot-nginx
+
+# Install PM2
+sudo npm install -g pm2
+
+# Clone project
+cd ~
+git clone https://github.com/luckyparihar3111-crypto/Startraders.git
+cd Startraders
+
+# Install and build
+npm install
+cd client
+npm install
+npm run build
+cd ..
+
+# Deploy frontend
+sudo cp -r client/build/* /var/www/html/
+
+# Start backend
+pm2 start server.js --name startraders-backend
+pm2 save

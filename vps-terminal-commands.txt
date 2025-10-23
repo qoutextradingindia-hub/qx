@@ -1,0 +1,39 @@
+# VPS SSH Terminal Commands - Copy-Paste These Exactly
+# Run these commands one by one in your VPS SSH terminal
+
+# Step 1: Connect to VPS
+ssh root@31.97.207.160
+
+# Step 2: Download and run the complete setup script
+curl -sSL https://raw.githubusercontent.com/luckyparihar3111-crypto/Startraders/main/complete-vps-setup.sh -o setup.sh
+
+# Step 3: Make it executable
+chmod +x setup.sh
+
+# Step 4: Run the setup script
+./setup.sh
+
+# Alternative single command (if above doesn't work):
+curl -sSL https://raw.githubusercontent.com/luckyparihar3111-crypto/Startraders/main/complete-vps-setup.sh | bash
+
+# What this script will do automatically:
+# ✅ Update system and install Node.js, PM2, NGINX
+# ✅ Clone your StarTraders project from GitHub
+# ✅ Install dependencies and build frontend
+# ✅ Deploy frontend to NGINX
+# ✅ Start backend with PM2
+# ✅ Configure NGINX with domain support
+# ✅ Setup SSL certificate (optional)
+# ✅ Configure firewall
+# ✅ Complete testing
+
+# The script will ask you:
+# 1. If you want to setup SSL certificate
+# 2. Answer 'y' if your domain DNS is configured, 'n' if not
+
+# Expected result:
+# ✅ Website live at: http://31.97.207.160
+# ✅ Domain ready: https://startradersindia.in (after DNS setup)
+# ✅ Backend API working
+# ✅ SSL certificate with auto-renewal
+# ✅ PM2 monitoring backend

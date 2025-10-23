@@ -1,0 +1,135 @@
+
+.referral-container {
+  padding: 20px;
+  background: transparent;
+  min-height: 100vh;
+  color: white;
+  font-family: sans-serif;
+}
+
+@media (max-width: 600px) {
+  .referral-table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+  .referral-table th, .referral-table td {
+    font-size: 0.95rem;
+    padding: 4px;
+    white-space: nowrap;
+  }
+}
+
+/* Merged mobile styles from both branches */
+@media (max-width: 600px) {
+  .referral-table {
+    width: 100%;
+    min-width: 320px;
+    max-width: 100vw;
+    display: block;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+  .referral-table th, .referral-table td {
+    font-size: 0.85rem;
+    padding: 4px 2px;
+    white-space: nowrap;
+  }
+  .referral-list-card {
+    max-width: 100vw;
+    padding: 2px;
+    margin: 0 auto 12px auto;
+    border-radius: 8px;
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .referral-container {
+    padding: 8px;
+  }
+
+  .income-box,
+  .income-summary {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 12px auto;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.95rem;
+    overflow-x: auto;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+
+  .responsive-wrapper {
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .referral-container {
+    padding: 8px;
+  }
+
+  .income-box,
+  .income-summary {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 12px auto;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.95rem;
+    overflow-x: auto;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+
+  .referral-list-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .responsive-wrapper {
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+
+.page-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.income-box {
+  background-color: #1b1b33;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon-yellow {
+  color: #FFD700;
+  font-size: 30px;
+}
+
+.income-summary {
+  margin-top: 30px;
+  text-align: center;
+  background: #222244;
+  padding: 15px;
+  border-radius: 10px;
+}

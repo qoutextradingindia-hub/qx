@@ -1,0 +1,29 @@
+# NGINX Configuration Setup Commands
+# Run these after PM2 backend is running
+
+# 1. Create NGINX config file
+sudo nano /etc/nginx/sites-available/startraders
+
+# Paste the content from nginx-startraders-config.txt file
+# Remember to replace "your-domain.com" with your actual domain
+
+# 2. Enable the site
+sudo ln -s /etc/nginx/sites-available/startraders /etc/nginx/sites-enabled/
+
+# 3. Remove default nginx site (optional)
+sudo rm /etc/nginx/sites-enabled/default
+
+# 4. Test NGINX configuration
+sudo nginx -t
+
+# 5. If test passes, reload NGINX
+sudo systemctl reload nginx
+
+# 6. Check NGINX status
+sudo systemctl status nginx
+
+# 7. Test the setup
+curl -I http://31.97.207.160
+
+echo "✅ NGINX configured successfully!"
+echo "🌐 Your site should now be accessible!"

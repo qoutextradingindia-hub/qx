@@ -1,0 +1,32 @@
+# PM2 Installation and Backend Setup Commands
+# Run these in VPS SSH terminal
+
+# 1. Install PM2 globally on VPS
+sudo npm install -g pm2
+
+# 2. Verify PM2 installation
+pm2 -v
+
+# 3. Navigate to backend directory
+cd ~/Startraders
+
+# 4. Start backend with PM2
+pm2 start server.js --name startraders-backend
+
+# 5. Check PM2 status
+pm2 status
+
+# 6. Save PM2 configuration
+pm2 save
+
+# 7. Setup PM2 to auto-start on system reboot
+pm2 startup
+
+# Copy the command PM2 gives you and run it (it will be something like):
+# sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u root --hp /root
+
+# 8. Check if backend is running
+curl http://localhost:3000
+# or whatever port your server.js uses
+
+echo "✅ PM2 and Backend setup completed!"

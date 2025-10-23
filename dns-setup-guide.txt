@@ -1,0 +1,30 @@
+# Domain DNS Configuration Required
+# आपको Hostinger में ये DNS records add करने होंगे:
+
+Go to: hpanel.hostinger.com/domains → startradersindia.in → DNS Records
+
+Add these A Records:
+==================
+
+Record Type: A
+Name: @
+Value: 31.97.207.160
+TTL: 3600
+
+Record Type: A  
+Name: www
+Value: 31.97.207.160
+TTL: 3600
+
+Record Type: CNAME (optional)
+Name: *
+Value: startradersindia.in
+TTL: 3600
+
+Important Notes:
+===============
+- DNS propagation takes 5-30 minutes
+- Test with: nslookup startradersindia.in
+- Should return: 31.97.207.160
+
+After DNS is configured, run the complete-setup.sh script!

@@ -1,0 +1,38 @@
+# VPS Setup Commands - Run these after SSH connection
+
+# 1. System Update
+sudo apt update && sudo apt upgrade -y
+
+# 2. Install NGINX
+sudo apt install nginx -y
+
+# 3. Check NGINX version
+nginx -v
+
+# 4. Start NGINX service
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# 5. Check NGINX status
+sudo systemctl status nginx
+
+# 6. Install Node.js and npm
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 7. Install PM2 for process management
+sudo npm install -g pm2
+
+# 8. Check installations
+node -v
+npm -v
+pm2 -v
+
+# 9. Install Git (if not already installed)
+sudo apt install git -y
+
+# 10. Test NGINX - Open browser and go to: http://31.97.207.160
+# You should see NGINX welcome page
+
+echo "✅ Basic setup completed!"
+echo "Now you can clone your project and configure NGINX"

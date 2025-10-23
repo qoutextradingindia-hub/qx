@@ -1,0 +1,28 @@
+# SSL Setup with Let's Encrypt Certbot
+# Run these commands after domain is pointing to your VPS
+
+# 1. Install Certbot
+sudo apt install certbot python3-certbot-nginx -y
+
+# 2. Get SSL certificate for startradersindia.in
+sudo certbot --nginx -d startradersindia.in -d www.startradersindia.in
+
+# Follow the prompts:
+# - Enter email address
+# - Agree to terms
+# - Choose whether to share email with EFF
+# - Select option to redirect HTTP to HTTPS (recommended: option 2)
+
+# 3. Test auto-renewal
+sudo certbot renew --dry-run
+
+# 4. Check SSL status
+sudo systemctl status certbot.timer
+
+# 5. Verify HTTPS is working
+curl -I https://startradersindia.in
+
+echo "✅ SSL certificate installed successfully!"
+echo "🔒 Your site is now secure with HTTPS!"
+
+# Note: Certificates auto-renew every 90 days

@@ -1,0 +1,88 @@
+# StarTraders Complete VPS Frontend Deployment
+# Run these commands in VPS SSH terminal after connecting
+
+# ========================================
+# IMPORTANT: Run these commands on VPS ONLY
+# ========================================
+
+echo "🚀 Starting StarTraders Frontend Deployment..."
+
+# Step 1: Navigate to project and pull latest changes
+cd ~/Startraders
+git pull origin main
+
+# Step 2: Navigate to client directory
+cd client
+
+# Step 3: Clean previous build
+echo "🧹 Cleaning previous build..."
+rm -rf build
+rm -rf node_modules/.cache
+
+# Step 4: Install dependencies
+echo "📦 Installing dependencies..."
+npm install
+
+# Step 5: Build for production
+echo "🏗️ Building for production..."
+npm run build
+
+# Step 6: Verify build completed
+echo "🔍 Verifying build..."
+if [ -d "build" ]; then
+    echo "✅ Build completed successfully!"
+    ls -la build/
+    
+    # Step 7: Backup current website (optional)
+    echo "💾 Creating backup of current site..."
+    sudo cp -r /var/www/html /var/www/html_backup_$(date +%Y%m%d_%H%M%S)
+    
+    # Step 8: Clear current website files
+    echo "🗑️ Clearing current website files..."
+    sudo rm -rf /var/www/html/*
+    
+    # Step 9: Copy new build files
+    echo "📂 Deploying new build files..."
+    sudo cp -r build/* /var/www/html/
+    
+    # Step 10: Set proper permissions
+    echo "🔒 Setting proper permissions..."
+    sudo chown -R www-data:www-data /var/www/html/
+    sudo chmod -R 755 /var/www/html/
+    
+    # Step 11: Test nginx configuration
+    echo "🧪 Testing nginx configuration..."
+    sudo nginx -t
+    
+    # Step 12: Reload nginx
+    echo "🔄 Reloading nginx..."
+    sudo systemctl reload nginx
+    
+    # Step 13: Final verification
+    echo "✅ Deployment completed!"
+    echo ""
+    echo "🌐 Website URLs to test:"
+    echo "http://31.97.207.160"
+    echo "https://startradersindia.in"
+    echo "https://www.startradersindia.in"
+    echo ""
+    echo "🔧 Check API endpoints in browser console:"
+    echo "Should show: https://startradersindia.in/api/login"
+    echo "Should NOT show: startraders-fullstack.onrender.com"
+    echo ""
+    echo "📊 Build info:"
+    du -sh /var/www/html/
+    
+else
+    echo "❌ Build failed! Check errors above."
+    echo "Try running: npm cache clean --force"
+    exit 1
+fi
+
+# Step 14: Test API connectivity
+echo "🧪 Testing API connectivity..."
+curl -I https://startradersindia.in/api/test 2>/dev/null || echo "⚠️  API test endpoint not available"
+
+echo "================================================"
+echo "✅ StarTraders Frontend Deployment Complete!"
+echo "================================================"

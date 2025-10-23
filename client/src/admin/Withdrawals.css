@@ -1,0 +1,40 @@
+.withdrawal-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #18182a;
+  color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px #0004;
+}
+.withdrawal-table th, .withdrawal-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #22223a;
+  text-align: center;
+}
+.withdrawal-table th {
+  background: #22223a;
+  color: #FFD700;
+  font-weight: bold;
+}
+.withdrawal-table tr:last-child td {
+  border-bottom: none;
+}
+.withdrawal-action {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  margin: 0 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+}
+.withdrawal-action.approve {
+  background: #004d40;
+  color: #fff;
+}
+.withdrawal-action.reject {
+  background: #aa0000;
+  color: #fff;
+}

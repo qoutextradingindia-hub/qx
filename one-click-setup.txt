@@ -1,0 +1,33 @@
+# 🚀 SINGLE COMMAND COMPLETE SETUP
+# Just copy this ONE command and paste in VPS terminal:
+
+curl -sSL https://raw.githubusercontent.com/luckyparihar3111-crypto/Startraders/main/complete-setup.sh | bash
+
+# OR if above doesn't work, use this manual method:
+
+# 1. Create the setup script
+cat > ~/complete-setup.sh << 'EOF'
+[SCRIPT CONTENT WILL BE HERE]
+EOF
+
+# 2. Make it executable
+chmod +x ~/complete-setup.sh
+
+# 3. Run it
+./complete-setup.sh
+
+# 🎯 What this script will do automatically:
+# ✅ Install PM2
+# ✅ Start backend with PM2  
+# ✅ Configure NGINX
+# ✅ Setup domain startradersindia.in
+# ✅ Install SSL certificate
+# ✅ Enable auto-renewal
+# ✅ Test everything
+
+# 📋 Requirements before running:
+# 1. Domain DNS must point to 31.97.207.160
+# 2. You must be in SSH terminal as root
+# 3. Frontend build should be ready in ~/Startraders/client/build/
+
+# 🆘 If any step fails, the script will stop and show error

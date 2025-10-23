@@ -1,0 +1,312 @@
+/* register.css - Polmax style, responsive for desktop grid and mobile list */
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f8fa;
+}
+
+.register-box {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(44, 44, 44, 0.08);
+  padding: 32px 24px;
+  width: 400px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-logo {
+  width: 72px;
+  margin-bottom: 12px;
+.register-logo {
+  display: block;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px auto;
+}
+  font-weight: 700;
+  color: #6c4ccf;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.register-input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f7f8fa;
+  transition: border 0.2s;
+}
+
+.register-input:focus {
+  border: 1.5px solid #6c4ccf;
+  outline: none;
+}
+
+.register-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.register-checkbox input[type="checkbox"] {
+  accent-color: #6c4ccf;
+  margin-right: 8px;
+}
+
+.register-btn {
+  width: 100%;
+  background: #6c4ccf;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.register-btn:hover {
+  background: #4b2bbd;
+}
+
+.register-login {
+  margin-top: 10px;
+  font-size: 0.98rem;
+  color: #444;
+}
+
+.register-login a {
+  color: #6c4ccf;
+  font-weight: 600;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+/* Desktop grid for options */
+@media (min-width: 768px) {
+  .register-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 24px;
+  }
+  .register-option {
+    background: #f7f8fa;
+    border: 1.5px dashed #6c4ccf;
+    border-radius: 12px;
+    padding: 18px 12px;
+    text-align: center;
+    color: #6c4ccf;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+  }
+}
+
+/* Mobile list for options */
+@media (max-width: 767px) {
+  .register-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .register-option {
+    background: #f7f8fa;
+    border: 1.5px dashed #6c4ccf;
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: left;
+    color: #6c4ccf;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    min-width: 100px;
+  }
+}
+/*
+  STARTRADERS Register Page CSS
+  Design: Polmax style, but with STARTRADERS branding only
+  Pixel-perfect, no design changes
+*/
+
+body {
+  background: #f5f6fa;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f6fa;
+}
+
+.register-box {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(44, 44, 44, 0.08);
+  padding: 40px 32px 32px 32px;
+  width: 400px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-logo {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+}
+
+.register-title {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: 'Montserrat', 'Poppins', Arial, sans-serif;
+  text-shadow: 0 2px 8px rgba(140,82,255,0.08);
+  color: #6c4ccf;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.register-input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fafafa;
+  transition: border-color 0.2s;
+}
+
+.register-input:focus {
+  border-color: #6c4ccf;
+  outline: none;
+}
+
+.register-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  font-size: 0.98rem;
+}
+
+.register-checkbox input[type="checkbox"] {
+  accent-color: #6c4ccf;
+  margin-right: 8px;
+}
+
+.register-btn {
+  width: 100%;
+  background: #6c4ccf;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.register-btn:hover {
+  background: #4b2fa6;
+}
+
+.register-login {
+  margin-top: 10px;
+  font-size: 0.98rem;
+  color: #444;
+}
+
+.register-login a {
+  color: #6c4ccf;
+  font-weight: 600;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+@media (max-width: 500px) {
+  .register-box {
+    padding: 24px 8px 16px 8px;
+    width: 98vw;
+    min-width: unset;
+  }
+}
+
+.register-title {
+  font-size: 1.4rem;
+}
+
+.register-input {
+  outline: none;
+  transition: border 0.2s;
+}
+
+.register-input:focus {
+  border: 1.5px solid #8e4cf7;
+}
+
+.register-checkbox {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 18px;
+  font-size: 0.98rem;
+}
+
+.register-checkbox input {
+  margin-right: 8px;
+}
+
+.register-btn {
+  width: 100%;
+  background: #8e4cf7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background 0.2s;
+}
+
+.register-btn:hover {
+  background: #6c4ccf;
+}
+
+.register-login {
+  color: #888;
+  font-size: 1rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.register-login a {
+  color: #6c4ccf;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-left: 4px;
+}

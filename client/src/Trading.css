@@ -1,0 +1,153 @@
+@media (max-width: 768px) {
+  .trading-table-wrapper {
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+  }
+
+  .trading-income-table {
+    min-width: 600px;
+    width: 100%;
+    display: block;
+  }
+}
+.trading-container {
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 600px) {
+  .trading-container {
+    padding: 8px;
+  }
+  .trading-box,
+  .statistics-section,
+  .strategies-section,
+  .history-section {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .page-title {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+  .trading-amount {
+    font-size: 1.5rem;
+  }
+  .section-title {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+  .history-table th, .history-table td {
+    font-size: 0.95rem;
+    padding: 4px;
+  }
+  .history-table {
+    width: 100%;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+}
+
+.page-title {
+  font-size: 32px;
+  margin-bottom: 25px;
+  font-weight: bold;
+  color: #f0b90b;
+}
+
+.trading-box {
+  background-color: #1c1c3c;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.trading-icon-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 20px;
+  color: #f7c948;
+  margin-bottom: 10px;
+}
+
+.icon-gold {
+  font-size: 26px;
+  color: gold;
+}
+
+.trading-amount {
+  font-size: 36px;
+  font-weight: bold;
+  color: #00ffcc;
+}
+
+.currency {
+  font-size: 18px;
+  color: #aaa;
+}
+
+.statistics-section,
+.strategies-section {
+  background-color: #13132a;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #2e2e4e;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #f7f7f7;
+}
+
+.statistics-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  padding: 15px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.stat-label {
+  font-weight: 500;
+  font-size: 14px;
+  color: #cccccc;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.divider {
+  width: 2px;
+  height: 50px;
+  background-color: #444;
+  margin: 0 15px;
+}
+
+.strategy-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #dddddd;
+  margin-top: 10px;
+}

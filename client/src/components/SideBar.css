@@ -1,0 +1,121 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background: #fff;
+}
+
+.sidebar-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 240px;
+  background: #8c52ff;
+  color: #fff;
+  box-shadow: 2px 0 16px rgba(140,82,255,0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 1002;
+  transition: transform 0.3s;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 18px 16px 18px;
+}
+.sidebar-logo img {
+  width: 44px;
+  height: 44px;
+}
+.sidebar-brand {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  font-family: 'Montserrat', 'Poppins', Arial, sans-serif;
+}
+
+.sidebar-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 12px;
+}
+.sidebar-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar-menu-item:hover {
+  background: #fff;
+  color: #8c52ff;
+}
+.sidebar-icon {
+  font-size: 1.2rem;
+}
+
+/* Hamburger for mobile */
+.sidebar-hamburger {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  background: #fff;
+  color: #8c52ff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 1100;
+  box-shadow: 0 2px 8px rgba(140,82,255,0.08);
+  display: none;
+}
+
+/* Overlay for mobile */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44, 44, 44, 0.18);
+  z-index: 1001;
+}
+
+@media (max-width: 900px) {
+  .sidebar-main {
+    transform: translateX(-100%);
+    width: 220px;
+  }
+  .sidebar-main.open {
+    transform: translateX(0);
+  }
+  .sidebar-hamburger {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar-main {
+    width: 80vw;
+    min-width: 180px;
+    max-width: 98vw;
+  }
+  .sidebar-logo img {
+    width: 36px;
+    height: 36px;
+  }
+  .sidebar-brand {
+    font-size: 1rem;
+  }
+}
