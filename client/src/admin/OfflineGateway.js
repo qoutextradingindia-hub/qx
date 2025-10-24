@@ -16,7 +16,7 @@ export default function OfflineGateway() {
 
   const fetchSettings = async () => {
     try {
-      const res = await axios.get('https://startradersindia.in/api/admin/trading-income-settings');
+      const res = await axios.get('https://qx-yb3z.onrender.com/api/admin/trading-income-settings');
       if (res.data.success && res.data.settings) {
         setDepositAddress(res.data.settings.depositAddress || '');
         setDepositQrCode(res.data.settings.depositQrCode || '');
@@ -31,7 +31,7 @@ export default function OfflineGateway() {
     setSaving(true);
     setMsg('');
     try {
-      const res = await axios.post('https://startradersindia.in/api/admin/deposit-settings', {
+      const res = await axios.post('https://qx-yb3z.onrender.com/api/admin/deposit-settings', {
         depositAddress: newAddress,
         depositQrCode: newQr
       });
@@ -58,7 +58,7 @@ export default function OfflineGateway() {
     formData.append('qr', file);
     formData.append('type', 'deposit');
     try {
-      const res = await axios.post('https://startradersindia.in/api/admin/upload-qr', formData, {
+      const res = await axios.post('https://qx-yb3z.onrender.com/api/admin/upload-qr', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (res.data.success && res.data.url) {

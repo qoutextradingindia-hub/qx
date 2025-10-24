@@ -29,7 +29,7 @@ const BoostingTimer = ({ userId }) => {
 
   const checkBoostingStatus = async () => {
     try {
-      const response = await axios.get(`https://startradersindia.in/api/user/check-boosting/${userId}`);
+      const response = await axios.get(`https://qx-yb3z.onrender.com/api/user/check-boosting/${userId}`);
       if (response.data.success) {
         setBoosting(response.data.boosting);
         setDirectReferrals(response.data.directReferrals || 0);

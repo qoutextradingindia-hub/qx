@@ -12,7 +12,7 @@ const UserDetail = () => {
   const [type, setType] = useState('credit');
 
   useEffect(() => {
-    axios.get(`https://startradersindia.in/api/admin/user/${id}`)
+    axios.get(`https://qx-yb3z.onrender.com/api/admin/user/${id}`)
       .then((res) => {
         if (res.data.success) {
           setUser(res.data.user);
@@ -25,7 +25,7 @@ const UserDetail = () => {
 
   const handleBalanceUpdate = () => {
     if (!amount || isNaN(amount)) return alert("Enter valid amount");
-    axios.post(`https://startradersindia.in/api/admin/update-balance`, {
+    axios.post(`https://qx-yb3z.onrender.com/api/admin/update-balance`, {
       userId: id,
       amount: parseFloat(amount),
       type: type,

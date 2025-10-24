@@ -13,7 +13,7 @@ const Referral = () => {
   const fetchOverview = () => {
     if (!user?._id) return;
     setLoading(true);
-    const url = `https://startradersindia.in/api/user/referral-overview/${user._id}`;
+    const url = `https://qx-yb3z.onrender.com/api/user/referral-overview/${user._id}`;
     console.log('[Referral] Fetching:', url);
     axios.get(url, {
       headers: {
@@ -51,12 +51,12 @@ const Referral = () => {
             <input
               type="text"
               readOnly
-              value={`https://startradersindia.in/register?ref=${user?._id}`}
+              value={`https://qx-473d.onrender.com/register?ref=${user?._id}`}
               className="border px-3 py-2 w-full rounded text-sm text-gray-800"
             />
             <button
               onClick={() => {
-                navigator.clipboard.writeText(`https://startradersindia.in/register?ref=${user?._id}`);
+                navigator.clipboard.writeText(`https://qx-473d.onrender.com/register?ref=${user?._id}`);
                 alert("Referral link copied!");
               }}
               className="ml-2 bg-purple-600 text-white px-3 py-2 rounded text-sm"
@@ -78,12 +78,12 @@ const Referral = () => {
           <input
             type="text"
             readOnly
-            value={`https://startradersindia.in/register?ref=${user?._id}`}
+            value={`https://qx-473d.onrender.com/register?ref=${user?._id}`}
             className="border px-3 py-2 w-full rounded text-sm text-gray-800"
           />
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`https://startradersindia.in/register?ref=${user?._id}`);
+              navigator.clipboard.writeText(`https://qx-473d.onrender.com/register?ref=${user?._id}`);
               alert("Referral link copied!");
             }}
             className="ml-2 bg-purple-600 text-white px-3 py-2 rounded text-sm"

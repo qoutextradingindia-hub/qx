@@ -13,7 +13,7 @@ const Trading = () => {
     if (!user || !user._id) return;
 
     axios
-      .get(`https://startradersindia.in/api/user/trading-income/${user._id}`)
+      .get(`https://qx-yb3z.onrender.com/api/user/trading-income/${user._id}`)
       .then((res) => {
         if (res.data.success && Array.isArray(res.data.transactions)) {
           // This API returns only trading_income transactions

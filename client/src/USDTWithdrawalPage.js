@@ -32,7 +32,7 @@ export default function USDTWithdrawalPage() {
     setOtpLoading(true);
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const res = await axios.post('https://startradersindia.in/api/user/send-withdraw-otp', {
+      const res = await axios.post('https://qx-yb3z.onrender.com/api/user/send-withdraw-otp', {
         email: user.email
       });
       setOtpMsg(res.data.message || 'OTP sent to your email');
@@ -60,7 +60,7 @@ export default function USDTWithdrawalPage() {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       // 1. Verify OTP first
-      const verifyRes = await axios.post('https://startradersindia.in/api/user/verify-withdraw-otp', {
+      const verifyRes = await axios.post('https://qx-yb3z.onrender.com/api/user/verify-withdraw-otp', {
         email: user.email,
         otp
       });
@@ -70,7 +70,7 @@ export default function USDTWithdrawalPage() {
         return;
       }
       // 2. Proceed with withdrawal
-      const res = await axios.post('https://startradersindia.in/api/user/withdrawal', {
+      const res = await axios.post('https://qx-yb3z.onrender.com/api/user/withdrawal', {
         userId: user._id,
         amount: parseFloat(amount),
         wallet: walletAddress,
