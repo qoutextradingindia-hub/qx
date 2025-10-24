@@ -29,8 +29,12 @@ class PriceSocketManager {
       'ETHUSDT': { price: 2650.75, change: 1.9 },
       'BNBUSDT': { price: 598.20, change: 0.7 },
       'ADAUSDT': { price: 0.4580, change: -0.2 },
-      'DOGEUSDT': { price: 0.1245, change: 3.2 },
-      'LINKUSDT': { price: 11.85, change: 1.1 }
+      'EURUSD': { price: 1.0845, change: 0.3 },
+      'AAPL': { price: 189.45, change: 1.2 },
+      'TSLA': { price: 258.30, change: -0.8 },
+      'XAUUSD': { price: 2654.80, change: 0.9 },
+      'GOOGL': { price: 172.30, change: 2.1 },
+      'DOGEUSDT': { price: 0.1245, change: 3.2 }
     };
   }
 

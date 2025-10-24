@@ -227,64 +227,170 @@ const TradingInterface = () => {
               {((priceData[selectedMarket.symbol]?.change || selectedMarket.priceChange || 0) >= 0 ? '+' : '')}{(priceData[selectedMarket.symbol]?.change || selectedMarket.priceChange || 0).toFixed(2)}%
             </div>
             
-            {/* Simple Price Chart */}
-            <div className="price-chart">
-              <svg width="100%" height="150" style={{ background: '#1a1a1a', borderRadius: '8px' }}>
-                {priceHistory[selectedMarket.symbol] && priceHistory[selectedMarket.symbol].length > 1 && (
+            {/* Live Price Chart - Quotex Style */}
+            <div className="price-chart" style={{ 
+              marginTop: '20px', 
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', 
+              borderRadius: '12px', 
+              padding: '15px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                marginBottom: '10px',
+                color: '#fff'
+              }}>
+                <span style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                  📈 {selectedMarket.symbol} Live Chart
+                </span>
+                <span style={{ fontSize: '12px', color: '#888' }}>
+                  Real-time • 2s updates
+                </span>
+              </div>
+              
+              <svg width="100%" height="200" style={{ 
+                background: 'linear-gradient(180deg, #0f3460 0%, #1a1a2e 100%)', 
+                borderRadius: '8px',
+                border: '1px solid #333'
+              }}>
+                {/* Grid Lines */}
+                <defs>
+                  <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333" strokeWidth="0.8" opacity="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#gridPattern)" />
+                
+                {/* Chart content */}
+                {priceHistory[selectedMarket.symbol] && priceHistory[selectedMarket.symbol].length > 1 ? (
                   <>
-                    {/* Chart Line */}
+                    {/* Price Line */}
                     <polyline
                       fill="none"
                       stroke="#00ff88"
-                      strokeWidth="2"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      filter="drop-shadow(0px 0px 6px #00ff88)"
                       points={
                         priceHistory[selectedMarket.symbol]
                           .map((point, index) => {
-                            const x = (index / (priceHistory[selectedMarket.symbol].length - 1)) * 100;
+                            const x = (index / (priceHistory[selectedMarket.symbol].length - 1)) * 95 + 2.5;
                             const prices = priceHistory[selectedMarket.symbol].map(p => p.price);
                             const minPrice = Math.min(...prices);
                             const maxPrice = Math.max(...prices);
-                            const y = 130 - ((point.price - minPrice) / (maxPrice - minPrice)) * 110;
+                            const priceRange = maxPrice - minPrice || 1;
+                            const y = 180 - ((point.price - minPrice) / priceRange) * 160;
                             return `${x}%,${y}`;
                           })
                           .join(' ')
                       }
                     />
-                    {/* Price points */}
-                    {priceHistory[selectedMarket.symbol].map((point, index) => {
-                      const x = (index / (priceHistory[selectedMarket.symbol].length - 1)) * 100;
-                      const prices = priceHistory[selectedMarket.symbol].map(p => p.price);
-                      const minPrice = Math.min(...prices);
-                      const maxPrice = Math.max(...prices);
-                      const y = 130 - ((point.price - minPrice) / (maxPrice - minPrice)) * 110;
-                      return (
+                    
+                    {/* Gradient Fill */}
+                    <defs>
+                      <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{stopColor:'#00ff88', stopOpacity:0.3}} />
+                        <stop offset="100%" style={{stopColor:'#00ff88', stopOpacity:0.05}} />
+                      </linearGradient>
+                    </defs>
+                    <polygon
+                      fill="url(#chartGradient)"
+                      points={
+                        priceHistory[selectedMarket.symbol]
+                          .map((point, index) => {
+                            const x = (index / (priceHistory[selectedMarket.symbol].length - 1)) * 95 + 2.5;
+                            const prices = priceHistory[selectedMarket.symbol].map(p => p.price);
+                            const minPrice = Math.min(...prices);
+                            const maxPrice = Math.max(...prices);
+                            const priceRange = maxPrice - minPrice || 1;
+                            const y = 180 - ((point.price - minPrice) / priceRange) * 160;
+                            return `${x}%,${y}`;
+                          })
+                          .join(' ') + ' 97.5%,190 2.5%,190'
+                      }
+                    />
+                    
+                    {/* Current Price Indicator */}
+                    {priceHistory[selectedMarket.symbol].length > 0 && (
+                      <g>
                         <circle
-                          key={index}
-                          cx={`${x}%`}
-                          cy={y}
-                          r="3"
+                          cx="97.5%"
+                          cy={(() => {
+                            const lastPoint = priceHistory[selectedMarket.symbol][priceHistory[selectedMarket.symbol].length - 1];
+                            const prices = priceHistory[selectedMarket.symbol].map(p => p.price);
+                            const minPrice = Math.min(...prices);
+                            const maxPrice = Math.max(...prices);
+                            const priceRange = maxPrice - minPrice || 1;
+                            return 180 - ((lastPoint.price - minPrice) / priceRange) * 160;
+                          })()}
+                          r="6"
                           fill="#00ff88"
+                          stroke="#1a1a2e"
+                          strokeWidth="2"
                         />
-                      );
-                    })}
+                        <circle
+                          cx="97.5%"
+                          cy={(() => {
+                            const lastPoint = priceHistory[selectedMarket.symbol][priceHistory[selectedMarket.symbol].length - 1];
+                            const prices = priceHistory[selectedMarket.symbol].map(p => p.price);
+                            const minPrice = Math.min(...prices);
+                            const maxPrice = Math.max(...prices);
+                            const priceRange = maxPrice - minPrice || 1;
+                            return 180 - ((lastPoint.price - minPrice) / priceRange) * 160;
+                          })()}
+                          r="3"
+                          fill="#fff"
+                        />
+                      </g>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {/* Loading state with animated pulse */}
+                    <text x="50%" y="100" textAnchor="middle" fill="#666" fontSize="16" fontWeight="bold">
+                      📊 Loading Chart Data...
+                    </text>
+                    <text x="50%" y="120" textAnchor="middle" fill="#888" fontSize="12">
+                      Price history will appear in a few seconds
+                    </text>
+                    
+                    {/* Animated pulse line */}
+                    <line x1="10%" y1="100" x2="90%" y2="100" stroke="#00ff88" strokeWidth="2" opacity="0.5">
+                      <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" repeatCount="indefinite"/>
+                    </line>
                   </>
                 )}
-                {/* Chart Grid Lines */}
-                <defs>
-                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#333" strokeWidth="0.5"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" opacity="0.3" />
                 
-                {/* Chart Labels */}
-                <text x="10" y="20" fill="#888" fontSize="12">
-                  {selectedMarket.symbol} Live Chart
-                </text>
-                <text x="10" y="140" fill="#888" fontSize="10">
-                  Real-time Price Movement
-                </text>
+                {/* Price Scale Labels */}
+                {priceHistory[selectedMarket.symbol] && priceHistory[selectedMarket.symbol].length > 1 && (
+                  <g>
+                    {/* High Price */}
+                    <text x="5" y="25" fill="#00ff88" fontSize="10" fontWeight="bold">
+                      {formatCurrency(Math.max(...priceHistory[selectedMarket.symbol].map(p => p.price)))}
+                    </text>
+                    {/* Low Price */}
+                    <text x="5" y="185" fill="#ff4757" fontSize="10" fontWeight="bold">
+                      {formatCurrency(Math.min(...priceHistory[selectedMarket.symbol].map(p => p.price)))}
+                    </text>
+                  </g>
+                )}
               </svg>
+              
+              {/* Chart Info */}
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                marginTop: '8px',
+                fontSize: '11px',
+                color: '#888'
+              }}>
+                <span>💹 Live Price Feed</span>
+                <span>🔄 Auto-updating</span>
+                <span>📊 Real-time Chart</span>
+              </div>
             </div>
           </div>
 
