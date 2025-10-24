@@ -69,8 +69,16 @@ app.use(userReferralRouter);
 const adminSymbolsRouter = require('./routes/adminSymbols');
 app.use('/api/admin/symbol', adminSymbolsRouter);
 
+// User Market API routes
 const userMarketRouter = require('./routes/userMarket');
+
+// Binary Trading API routes  
+const tradingRouter = require('./routes/trading');
+// Use userMarket routes
 app.use('/api', userMarketRouter);
+
+// Use binary trading routes  
+app.use('/api/trading', tradingRouter);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -144,7 +152,15 @@ mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("✅ MongoDB connected successfully"))
+.then(() => {
+  console.log("✅ MongoDB connected successfully");
+  
+  // Initialize Price Socket Manager after DB connection
+  const PriceSocketManager = require('./utils/priceSocket');
+  app.priceManager = new PriceSocketManager();
+  app.priceManager.start();
+  console.log("🚀 Price Socket Manager started");
+})
 .catch((err) => {
   console.log("❌ MongoDB connection error:", err.message);
   console.log("🔍 Connection string used:", mongoUri ? mongoUri.substring(0, 20) + "..." : "UNDEFINED");

@@ -40,6 +40,7 @@ import AdminLogin from './admin/AdminLogin';
 import TradingIncome from './admin/TradingIncome';
 import ReferralSettingsAdmin from './admin/ReferralSettings';
 import AdminSymbols from './admin/AdminSymbols';
+import TradingInterface from './TradingInterface';
 import TransactionHistory from './TransactionHistory.jsx';
 // import logo from './assets/logo.png';
 // Old sidebar and hamburger menu imports removed if present
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="/earning" element={<Earning />} />
           <Route path="/salary-income" element={<SalaryIncome />} />
           <Route path="/trading" element={<Trading />} />
+          <Route path="/binary-trading" element={<TradingInterface />} />
           <Route path="/withdrawal" element={<USDTWithdrawalPage />} />
           <Route path="/report" element={<Report />} />
           <Route path="/support" element={<Support />} />
