@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import './TradingInterface.css';
 
 const TradingInterface = () => {
   const [markets, setMarkets] = useState([]);
@@ -8,13 +7,11 @@ const TradingInterface = () => {
   const [tradeAmount, setTradeAmount] = useState(1);
   const [expiryTime, setExpiryTime] = useState(60);
   const [activeTrades, setActiveTrades] = useState([]);
-  const [userBalance, setUserBalance] = useState(0);
+  const [userBalance, setUserBalance] = useState(1000);
   const [priceData, setPriceData] = useState({});
   const [candleData, setCandleData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(60);
-  const [tradeStartTime, setTradeStartTime] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const priceUpdateInterval = useRef(null);
@@ -133,6 +130,7 @@ const TradingInterface = () => {
         
         return updatedCandles;
       }
+    });
   };
 
   // Fetch user balance
@@ -263,20 +261,20 @@ const TradingInterface = () => {
 
   return (
     <div style={{
-      background: '#0a0a0a',
+      background: '#000000',
       minHeight: '100vh',
       color: 'white',
       fontFamily: 'Arial, sans-serif',
       display: 'flex',
       flexDirection: 'column'
     }}>
-      {/* Top Bar - Quotex Style */}
+      {/* Top Bar - Pure Black Quotex Style */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '8px 15px',
-        background: '#1a1a1a',
+        background: '#000000',
         borderBottom: '1px solid #333'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -299,7 +297,8 @@ const TradingInterface = () => {
             borderRadius: '3px',
             color: 'white',
             fontSize: '12px',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            cursor: 'pointer'
           }}>
             Deposit
           </button>
@@ -316,160 +315,154 @@ const TradingInterface = () => {
         </div>
       </div>
 
-      {/* Main Chart Area - Full Width */}
+      {/* Main Chart Area - Pure Black Background */}
       <div style={{ 
         flex: 1,
-        background: '#0f0f0f',
+        background: '#000000',
         position: 'relative',
         height: '60vh'
       }}>
         {selectedMarket && (
-          <>
-            {/* Chart Container */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              padding: '10px'
-            }}>
-              {/* Professional Candlestick Chart - Quotex Style */}
-              <svg width="100%" height="100%" style={{ background: '#0a0a0a' }}>
-                {/* Horizontal Grid Lines */}
-                {[...Array(8)].map((_, i) => {
-                  const y = (i + 1) * 12.5;
-                  const price = candleData.length > 0 ? 
-                    (Math.min(...candleData.map(c => c.low)) + 
-                     (Math.max(...candleData.map(c => c.high)) - Math.min(...candleData.map(c => c.low))) * 
-                     (1 - i / 7)).toFixed(3) : (99.300 + i * 0.010).toFixed(3);
-                  return (
-                    <g key={i}>
-                      <line 
-                        x1="0" 
-                        y1={`${y}%`} 
-                        x2="100%" 
-                        y2={`${y}%`} 
-                        stroke="#1a1a1a" 
-                        strokeWidth="1"
-                      />
-                      <text 
-                        x="96%" 
-                        y={`${y - 1}%`} 
-                        fill="#666" 
-                        fontSize="11" 
-                        textAnchor="end"
-                      >
-                        {price}
-                      </text>
-                    </g>
-                  );
-                })}
-                
-                {/* Vertical Grid Lines */}
-                {[...Array(12)].map((_, i) => {
-                  const x = (i + 1) * 8.33;
-                  return (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            padding: '10px'
+          }}>
+            {/* Professional Candlestick Chart */}
+            <svg width="100%" height="100%" style={{ background: '#000000' }}>
+              {/* Horizontal Grid Lines */}
+              {[...Array(8)].map((_, i) => {
+                const y = (i + 1) * 12.5;
+                const price = (99.300 + i * 0.010).toFixed(3);
+                return (
+                  <g key={i}>
                     <line 
-                      key={i}
-                      x1={`${x}%`} 
-                      y1="0" 
-                      x2={`${x}%`} 
-                      y2="100%" 
+                      x1="0" 
+                      y1={`${y}%`} 
+                      x2="100%" 
+                      y2={`${y}%`} 
                       stroke="#1a1a1a" 
                       strokeWidth="1"
                     />
-                  );
-                })}
-                
-                {/* Time Labels at Bottom */}
-                {candleData.slice(-6).map((candle, index) => {
-                  const x = 20 + (index * 15);
-                  const time = new Date(candle.time).toLocaleTimeString('en-US', { 
-                    hour12: false, 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                  });
-                  return (
                     <text 
-                      key={index} 
-                      x={`${x}%`} 
-                      y="95%" 
+                      x="96%" 
+                      y={`${y - 1}%`} 
                       fill="#666" 
-                      fontSize="10" 
-                      textAnchor="middle"
+                      fontSize="11" 
+                      textAnchor="end"
                     >
-                      {time}
+                      {price}
                     </text>
-                  );
-                })}
+                  </g>
+                );
+              })}
+              
+              {/* Vertical Grid Lines */}
+              {[...Array(12)].map((_, i) => {
+                const x = (i + 1) * 8.33;
+                return (
+                  <line 
+                    key={i}
+                    x1={`${x}%`} 
+                    y1="0" 
+                    x2={`${x}%`} 
+                    y2="100%" 
+                    stroke="#1a1a1a" 
+                    strokeWidth="1"
+                  />
+                );
+              })}
+              
+              {/* Time Labels */}
+              {[11, 12, 13, 14, 15, 16].map((hour, index) => {
+                const x = 20 + (index * 15);
+                return (
+                  <text 
+                    key={index} 
+                    x={`${x}%`} 
+                    y="95%" 
+                    fill="#666" 
+                    fontSize="10" 
+                    textAnchor="middle"
+                  >
+                    {hour}:{(10 + index * 2).toString().padStart(2, '0')}
+                  </text>
+                );
+              })}
+              
+              {/* Professional Candlesticks */}
+              {[...Array(20)].map((_, index) => {
+                const x = 10 + (index * 4);
+                const isGreen = Math.random() > 0.5;
+                const basePrice = 99.350;
+                const variation = (Math.random() - 0.5) * 0.040;
                 
-                {/* Professional Candlesticks */}
-                {candleData.slice(-20).map((candle, index) => {
-                  if (candleData.length === 0) return null;
-                  
-                  const x = 10 + (index * 4);
-                  const minPrice = Math.min(...candleData.map(c => c.low));
-                  const maxPrice = Math.max(...candleData.map(c => c.high));
-                  const priceRange = maxPrice - minPrice || 0.001;
-                  
-                  const highY = 15 + ((maxPrice - candle.high) / priceRange) * 70;
-                  const lowY = 15 + ((maxPrice - candle.low) / priceRange) * 70;
-                  const openY = 15 + ((maxPrice - candle.open) / priceRange) * 70;
-                  const closeY = 15 + ((maxPrice - candle.close) / priceRange) * 70;
-                  
-                  const isGreen = candle.close > candle.open;
-                  const bodyTop = Math.min(openY, closeY);
-                  const bodyHeight = Math.abs(closeY - openY) || 0.5;
-                  
-                  return (
-                    <g key={index}>
-                      {/* Candle Wick */}
-                      <line
-                        x1={`${x}%`}
-                        y1={`${highY}%`}
-                        x2={`${x}%`}
-                        y2={`${lowY}%`}
-                        stroke={isGreen ? '#4CAF50' : '#F44336'}
-                        strokeWidth="1"
-                      />
-                      {/* Candle Body */}
-                      <rect
-                        x={`${x - 1}%`}
-                        y={`${bodyTop}%`}
-                        width="2%"
-                        height={`${bodyHeight}%`}
-                        fill={isGreen ? '#4CAF50' : '#F44336'}
-                        stroke={isGreen ? '#4CAF50' : '#F44336'}
-                        strokeWidth="1"
-                      />
-                    </g>
-                  );
-                })}
+                const open = basePrice + variation;
+                const close = open + (Math.random() - 0.5) * 0.020;
+                const high = Math.max(open, close) + Math.random() * 0.015;
+                const low = Math.min(open, close) - Math.random() * 0.015;
                 
-                {/* Trade Start/End Markers - Quotex Style */}
-                <g>
-                  <line x1="25%" y1="10%" x2="25%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
-                  <text x="25%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
-                    Beginning of trade
-                  </text>
-                  <line x1="75%" y1="10%" x2="75%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
-                  <text x="75%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
-                    End of trade
-                  </text>
-                  <text x="50%" y="92%" fill="#FFC107" fontSize="9" textAnchor="middle">
-                    00:46
-                  </text>
-                </g>
-              </svg>
-            </div>
-          </>
+                const priceRange = 0.080;
+                const minPrice = 99.300;
+                
+                const highY = 15 + ((99.380 - high) / priceRange) * 70;
+                const lowY = 15 + ((99.380 - low) / priceRange) * 70;
+                const openY = 15 + ((99.380 - open) / priceRange) * 70;
+                const closeY = 15 + ((99.380 - close) / priceRange) * 70;
+                
+                const bodyTop = Math.min(openY, closeY);
+                const bodyHeight = Math.abs(closeY - openY) || 0.5;
+                
+                return (
+                  <g key={index}>
+                    {/* Wick */}
+                    <line
+                      x1={`${x}%`}
+                      y1={`${highY}%`}
+                      x2={`${x}%`}
+                      y2={`${lowY}%`}
+                      stroke={isGreen ? '#4CAF50' : '#F44336'}
+                      strokeWidth="1"
+                    />
+                    {/* Body */}
+                    <rect
+                      x={`${x - 1}%`}
+                      y={`${bodyTop}%`}
+                      width="2%"
+                      height={`${bodyHeight}%`}
+                      fill={isGreen ? '#4CAF50' : '#F44336'}
+                      stroke={isGreen ? '#4CAF50' : '#F44336'}
+                      strokeWidth="1"
+                    />
+                  </g>
+                );
+              })}
+              
+              {/* Trade Markers - Quotex Style */}
+              <g>
+                <line x1="25%" y1="10%" x2="25%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
+                <text x="25%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
+                  Beginning of trade
+                </text>
+                <line x1="75%" y1="10%" x2="75%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
+                <text x="75%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
+                  End of trade
+                </text>
+                <text x="50%" y="92%" fill="#FFC107" fontSize="9" textAnchor="middle">
+                  00:46
+                </text>
+              </g>
+            </svg>
+          </div>
         )}
       </div>
 
-      {/* Bottom Trading Panel - Quotex Style */}
+      {/* Bottom Trading Panel - Pure Black */}
       <div style={{ 
-        background: '#1a1a1a',
+        background: '#000000',
         padding: '15px',
         borderTop: '1px solid #333'
       }}>
@@ -482,7 +475,7 @@ const TradingInterface = () => {
         }}>
           <span style={{ fontSize: '20px' }}>🇦🇺🇯🇵</span>
           <select 
-            value={selectedMarket?.symbol || ''}
+            value={selectedMarket?.symbol || 'AUDJPY'}
             onChange={(e) => {
               const market = markets.find(m => m.symbol === e.target.value);
               setSelectedMarket(market);
@@ -497,11 +490,10 @@ const TradingInterface = () => {
               fontWeight: 'bold'
             }}
           >
-            {markets.map(market => (
-              <option key={market.symbol} value={market.symbol}>
-                {market.symbol}
-              </option>
-            ))}
+            <option value="AUDJPY">AUD/JPY</option>
+            <option value="EURUSD">EUR/USD</option>
+            <option value="GBPUSD">GBP/USD</option>
+            <option value="USDJPY">USD/JPY</option>
           </select>
           <div style={{ 
             background: '#FF9800', 
@@ -511,7 +503,7 @@ const TradingInterface = () => {
             fontSize: '12px',
             fontWeight: 'bold'
           }}>
-            {selectedMarket?.payoutPercent || 87}%
+            87%
           </div>
           <div style={{ fontSize: '12px', color: '#888', marginLeft: 'auto' }}>
             PENDING TRADE 🔵
@@ -530,11 +522,7 @@ const TradingInterface = () => {
             <div style={{ fontSize: '12px', color: '#888', marginBottom: '5px' }}>Time</div>
             <input
               type="text"
-              value={`${Math.floor(expiryTime / 60)}:${(expiryTime % 60).toString().padStart(2, '0')}`}
-              onChange={(e) => {
-                const [min, sec] = e.target.value.split(':');
-                setExpiryTime(parseInt(min) * 60 + parseInt(sec || 0));
-              }}
+              value="1:11"
               style={{
                 background: '#333',
                 border: '1px solid #555',
@@ -576,7 +564,8 @@ const TradingInterface = () => {
                 border: 'none',
                 color: 'white',
                 fontSize: '18px',
-                marginLeft: '10px'
+                marginLeft: '10px',
+                cursor: 'pointer'
               }}>+</button>
             </div>
             <div style={{ fontSize: '10px', color: '#888', marginTop: '2px' }}>
@@ -588,7 +577,7 @@ const TradingInterface = () => {
           <div style={{ marginLeft: 'auto' }}>
             <div style={{ fontSize: '12px', color: '#888' }}>Payout:</div>
             <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4CAF50' }}>
-              {((tradeAmount * (selectedMarket?.payoutPercent || 87)) / 100 + tradeAmount).toFixed(2)}$
+              1.87$
             </div>
           </div>
         </div>
@@ -643,20 +632,21 @@ const TradingInterface = () => {
         </div>
       </div>
 
-      {/* Bottom Navigation Icons */}
+      {/* Bottom Navigation Icons - Quotex Style */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
         padding: '10px',
-        background: '#0a0a0a',
+        background: '#000000',
         borderTop: '1px solid #333'
       }}>
         {['📊', '❓', '👤', '💬', '⚙️'].map((icon, index) => (
           <div key={index} style={{
             padding: '10px',
             fontSize: '20px',
-            opacity: index === 0 ? 1 : 0.5
+            opacity: index === 0 ? 1 : 0.5,
+            position: 'relative'
           }}>
             {icon}
             {index === 1 && <span style={{
@@ -665,8 +655,8 @@ const TradingInterface = () => {
               borderRadius: '50%',
               width: '8px',
               height: '8px',
-              marginLeft: '-5px',
-              marginTop: '-5px'
+              top: '5px',
+              right: '5px'
             }}></span>}
           </div>
         ))}
