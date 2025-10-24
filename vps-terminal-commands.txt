@@ -33,7 +33,7 @@ curl -sSL https://raw.githubusercontent.com/luckyparihar3111-crypto/Startraders/
 
 # Expected result:
 # ✅ Website live at: http://31.97.207.160
-# ✅ Domain ready: https://startradersindia.in (after DNS setup)
+# ✅ Domain ready: https://qxtrand.onrender.com (after DNS setup)
 # ✅ Backend API working
 # ✅ SSL certificate with auto-renewal
 # ✅ PM2 monitoring backend

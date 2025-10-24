@@ -20,7 +20,7 @@ chmod +x ~/complete-setup.sh
 # ✅ Install PM2
 # ✅ Start backend with PM2  
 # ✅ Configure NGINX
-# ✅ Setup domain startradersindia.in
+# ✅ Setup domain qxtrand.onrender.com
 # ✅ Install SSL certificate
 # ✅ Enable auto-renewal
 # ✅ Test everything

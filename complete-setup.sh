@@ -32,7 +32,7 @@ echo "🌐 Creating NGINX configuration..."
 sudo tee /etc/nginx/sites-available/startraders > /dev/null <<EOF
 server {
     listen 80;
-    server_name startradersindia.in www.startradersindia.in 31.97.207.160;
+    server_name qxtrand.onrender.com qxtrand.onrender.com 31.97.207.160;
     
     # Root directory for React build files
     root /var/www/html;
@@ -120,11 +120,11 @@ sudo apt update
 sudo apt install certbot python3-certbot-nginx -y
 
 # Step 10: Get SSL Certificate
-echo "🔐 Getting SSL certificate for startradersindia.in..."
+echo "🔐 Getting SSL certificate for qxtrand.onrender.com..."
 echo "⚠️  Make sure your domain DNS is pointing to this VPS IP: 31.97.207.160"
 read -p "Press Enter if DNS is configured, or Ctrl+C to cancel..."
 
-sudo certbot --nginx -d startradersindia.in -d www.startradersindia.in --non-interactive --agree-tos --email admin@startradersindia.in --redirect
+sudo certbot --nginx -d qxtrand.onrender.com -d qxtrand.onrender.com --non-interactive --agree-tos --email admin@qxtrand.onrender.com --redirect
 
 # Step 11: Test auto-renewal
 echo "🔄 Setting up SSL auto-renewal..."
@@ -145,14 +145,14 @@ echo ""
 
 # Step 13: Test website
 echo "🧪 Testing website..."
-curl -I http://startradersindia.in
-curl -I https://startradersindia.in
+curl -I http://qxtrand.onrender.com
+curl -I https://qxtrand.onrender.com
 
 echo ""
 echo "🎉 ================================="
 echo "✅ DEPLOYMENT COMPLETED SUCCESSFULLY!"
-echo "🌐 Website: https://startradersindia.in"
-echo "🔧 Backend API: https://startradersindia.in/api"
+echo "🌐 Website: https://qxtrand.onrender.com"
+echo "🔧 Backend API: https://qxtrand.onrender.com/api"
 echo "🔒 SSL: Enabled & Auto-renewal setup"
 echo "⚡ PM2: Backend running automatically"
 echo "🎉 ================================="

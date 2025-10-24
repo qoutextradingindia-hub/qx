@@ -18,7 +18,7 @@ export default function USDTDepositPage() {
       setUserEmail(userData.email);
     }
     // Fetch deposit address and QR from backend
-    axios.get('https://startradersindia.in/api/user/deposit-settings')
+    axios.get('https://qxtrand.onrender.com/api/user/deposit-settings')
       .then(res => {
         if (res.data.success) {
           setDepositAddress(res.data.depositAddress || '');
@@ -30,7 +30,7 @@ export default function USDTDepositPage() {
   const handleSubmit = async () => {
     if (amount && transactionId && userEmail) {
       try {
-        const res = await axios.post('https://startradersindia.in/api/user/deposit', {
+        const res = await axios.post('https://qxtrand.onrender.com/api/user/deposit', {
           amount,
           transactionId,
           email: userEmail,

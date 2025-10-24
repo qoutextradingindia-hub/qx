@@ -6,7 +6,7 @@ const getBaseURL = () => {
   return 'https://qxtrand.onrender.com/api';
   
   // Old URL (commented out):
-  // return 'https://startraders-fullstack.onrender.com/api';
+  // return 'https://qxtrand.onrender.com/api';
 };
 
 // Centralized API instance for all backend calls

@@ -10,7 +10,7 @@ const TransactionHistory = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user._id) return;
-    axios.get(`https://startradersindia.in/api/user/transactions/${user._id}`)
+    axios.get(`https://qxtrand.onrender.com/api/user/transactions/${user._id}`)
       .then(res => {
         // Try to get balance from API response
         let bal = 0;

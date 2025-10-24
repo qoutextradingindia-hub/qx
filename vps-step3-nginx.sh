@@ -6,7 +6,7 @@ echo "🌐 Creating NGINX configuration..."
 sudo tee /etc/nginx/sites-available/startraders > /dev/null <<'EOF'
 server {
     listen 80;
-    server_name startradersindia.in www.startradersindia.in 31.97.207.160;
+    server_name qxtrand.onrender.com qxtrand.onrender.com 31.97.207.160;
     
     # Root directory for React build files
     root /var/www/html;

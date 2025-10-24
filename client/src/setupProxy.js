@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://startradersindia.in', // VPS Backend URL
+      target: 'https://qxtrand.onrender.com', // Current Backend URL
       changeOrigin: true,
     })
   );

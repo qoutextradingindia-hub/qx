@@ -4,8 +4,8 @@
 # 1. Install Certbot
 sudo apt install certbot python3-certbot-nginx -y
 
-# 2. Get SSL certificate for startradersindia.in
-sudo certbot --nginx -d startradersindia.in -d www.startradersindia.in
+# 2. Get SSL certificate for qxtrand.onrender.com
+sudo certbot --nginx -d qxtrand.onrender.com -d qxtrand.onrender.com
 
 # Follow the prompts:
 # - Enter email address
@@ -20,7 +20,7 @@ sudo certbot renew --dry-run
 sudo systemctl status certbot.timer
 
 # 5. Verify HTTPS is working
-curl -I https://startradersindia.in
+curl -I https://qxtrand.onrender.com
 
 echo "✅ SSL certificate installed successfully!"
 echo "🔒 Your site is now secure with HTTPS!"

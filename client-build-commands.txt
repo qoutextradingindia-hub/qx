@@ -63,11 +63,11 @@ if [ -d "build" ]; then
     echo ""
     echo "🌐 Website URLs to test:"
     echo "http://31.97.207.160"
-    echo "https://startradersindia.in"
-    echo "https://www.startradersindia.in"
+    echo "https://qxtrand.onrender.com"
+    echo "https://qxtrand.onrender.com"
     echo ""
     echo "🔧 Check API endpoints in browser console:"
-    echo "Should show: https://startradersindia.in/api/login"
+    echo "Should show: https://qxtrand.onrender.com/api/login"
     echo "Should NOT show: startraders-fullstack.onrender.com"
     echo ""
     echo "📊 Build info:"
@@ -81,7 +81,7 @@ fi
 
 # Step 14: Test API connectivity
 echo "🧪 Testing API connectivity..."
-curl -I https://startradersindia.in/api/test 2>/dev/null || echo "⚠️  API test endpoint not available"
+curl -I https://qxtrand.onrender.com/api/test 2>/dev/null || echo "⚠️  API test endpoint not available"
 
 echo "================================================"
 echo "✅ StarTraders Frontend Deployment Complete!"

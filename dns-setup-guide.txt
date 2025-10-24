@@ -1,7 +1,7 @@
 # Domain DNS Configuration Required
 # आपको Hostinger में ये DNS records add करने होंगे:
 
-Go to: hpanel.hostinger.com/domains → startradersindia.in → DNS Records
+Go to: hpanel.hostinger.com/domains → qxtrand.onrender.com → DNS Records
 
 Add these A Records:
 ==================
@@ -18,13 +18,13 @@ TTL: 3600
 
 Record Type: CNAME (optional)
 Name: *
-Value: startradersindia.in
+Value: qxtrand.onrender.com
 TTL: 3600
 
 Important Notes:
 ===============
 - DNS propagation takes 5-30 minutes
-- Test with: nslookup startradersindia.in
+- Test with: nslookup qxtrand.onrender.com
 - Should return: 31.97.207.160
 
 After DNS is configured, run the complete-setup.sh script!

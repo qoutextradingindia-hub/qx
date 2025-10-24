@@ -2,13 +2,13 @@
 # SSL Certificate and Domain Configuration
 
 # IMPORTANT: Before running this script, make sure DNS is configured:
-# Domain: startradersindia.in should point to 31.97.207.160
+# Domain: qxtrand.onrender.com should point to 31.97.207.160
 
-echo "🔒 Starting SSL setup for startradersindia.in..."
+echo "🔒 Starting SSL setup for qxtrand.onrender.com..."
 
 # 1. Check if domain is pointing to this server
 echo "🔍 Checking DNS configuration..."
-nslookup startradersindia.in
+nslookup qxtrand.onrender.com
 echo "⚠️  Make sure the above shows IP: 31.97.207.160"
 echo "If not, configure DNS first and wait for propagation (5-30 minutes)"
 
@@ -25,11 +25,11 @@ fi
 # 2. Get SSL certificate
 echo "🔐 Obtaining SSL certificate..."
 sudo certbot --nginx \
-    -d startradersindia.in \
-    -d www.startradersindia.in \
+    -d qxtrand.onrender.com \
+    -d qxtrand.onrender.com \
     --non-interactive \
     --agree-tos \
-    --email admin@startradersindia.in \
+    --email admin@qxtrand.onrender.com \
     --redirect
 
 # 3. Test SSL auto-renewal
@@ -47,18 +47,18 @@ sleep 5
 
 # Test HTTP redirect to HTTPS
 echo "Testing HTTP to HTTPS redirect..."
-curl -I http://startradersindia.in 2>/dev/null | head -n 1
+curl -I http://qxtrand.onrender.com 2>/dev/null | head -n 1
 
 # Test HTTPS
 echo "Testing HTTPS..."
-curl -I https://startradersindia.in 2>/dev/null | head -n 1
+curl -I https://qxtrand.onrender.com 2>/dev/null | head -n 1
 
 # 6. Display final status
 echo ""
 echo "🎉 ================================="
 echo "✅ STARTRADERS DEPLOYMENT COMPLETED!"
-echo "🌐 Website: https://startradersindia.in"
-echo "🔧 Backend API: https://startradersindia.in/api"
+echo "🌐 Website: https://qxtrand.onrender.com"
+echo "🔧 Backend API: https://qxtrand.onrender.com/api"
 echo "🔒 SSL: Enabled with auto-renewal"
 echo "⚡ Backend: Running with PM2"
 echo "🎉 ================================="

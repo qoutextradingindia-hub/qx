@@ -33,7 +33,7 @@ function Register() {
       return;
     }
     try {
-      const url = 'https://startradersindia.in/api/register';
+      const url = 'https://qxtrand.onrender.com/api/register';
       const res = await axios.post(url, {
         sponsorId: sponsorId ? sponsorId.toUpperCase() : '',
         name,

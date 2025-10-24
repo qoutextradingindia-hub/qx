@@ -15,7 +15,7 @@ export default function Withdrawals() {
   const fetchWithdrawals = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('https://startradersindia.in/api/admin/withdrawals');
+      const res = await axios.get('https://qxtrand.onrender.com/api/admin/withdrawals');
       if (res.data.success) setWithdrawals(res.data.withdrawals);
       else setError('Failed to fetch withdrawals');
     } catch (err) {
@@ -29,10 +29,10 @@ export default function Withdrawals() {
     setActionLoading(id + action);
     try {
       if (action === 'approve') {
-        await axios.post('https://startradersindia.in/api/admin/approve-withdrawal', { id });
+        await axios.post('https://qxtrand.onrender.com/api/admin/approve-withdrawal', { id });
       } else {
         const adminNote = prompt('Enter rejection note (optional):') || '';
-        await axios.post('https://startradersindia.in/api/admin/reject-withdrawal', { id, adminNote });
+        await axios.post('https://qxtrand.onrender.com/api/admin/reject-withdrawal', { id, adminNote });
       }
       fetchWithdrawals();
     } catch (err) {

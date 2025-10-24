@@ -36,7 +36,7 @@ if [ -d "build" ]; then
     echo "   sudo systemctl reload nginx"
     echo ""
     echo "4. Test the website:"
-    echo "   https://startradersindia.in"
+    echo "   https://qxtrand.onrender.com"
     echo ""
     echo "✅ Frontend ready for deployment!"
 else

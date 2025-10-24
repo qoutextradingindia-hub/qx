@@ -68,7 +68,7 @@ echo "📋 Step 3/4: NGINX Configuration..."
 sudo tee /etc/nginx/sites-available/startraders > /dev/null <<'EOF'
 server {
     listen 80;
-    server_name startradersindia.in www.startradersindia.in 31.97.207.160;
+    server_name qxtrand.onrender.com qxtrand.onrender.com 31.97.207.160;
     
     root /var/www/html;
     index index.html;
@@ -147,11 +147,11 @@ read -p "Setup SSL certificate? (y/n): " setup_ssl
 if [ "$setup_ssl" = "y" ]; then
     echo "🔐 Setting up SSL certificate..."
     sudo certbot --nginx \
-        -d startradersindia.in \
-        -d www.startradersindia.in \
+        -d qxtrand.onrender.com \
+        -d qxtrand.onrender.com \
         --non-interactive \
         --agree-tos \
-        --email admin@startradersindia.in \
+        --email admin@qxtrand.onrender.com \
         --redirect || echo "⚠️  SSL setup failed - domain might not be pointing to this server yet"
     
     sudo certbot renew --dry-run 2>/dev/null && echo "✅ SSL auto-renewal test passed"
@@ -167,7 +167,7 @@ echo "✅ DEPLOYMENT COMPLETED SUCCESSFULLY!"
 echo "================================="
 echo "🌐 Website: http://31.97.207.160"
 if [ "$setup_ssl" = "y" ]; then
-    echo "🔒 HTTPS: https://startradersindia.in"
+    echo "🔒 HTTPS: https://qxtrand.onrender.com"
 fi
 echo "🔧 Backend: Running on PM2"
 echo ""
@@ -189,8 +189,8 @@ echo "sudo nginx -t           - Test nginx config"
 echo ""
 echo "🎯 Next Steps:"
 if [ "$setup_ssl" != "y" ]; then
-    echo "1. Configure DNS: startradersindia.in -> 31.97.207.160"
+    echo "1. Configure DNS: qxtrand.onrender.com -> 31.97.207.160"
     echo "2. Wait for DNS propagation (5-30 minutes)"
-    echo "3. Run: sudo certbot --nginx -d startradersindia.in -d www.startradersindia.in"
+    echo "3. Run: sudo certbot --nginx -d qxtrand.onrender.com -d qxtrand.onrender.com"
 fi
 echo "✅ Your StarTraders application is now LIVE!"

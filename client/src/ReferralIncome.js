@@ -14,7 +14,7 @@ const ReferralIncome = () => {
 
     // Fetch referral income data
     axios
-      .get(`https://startradersindia.in/api/user/referral-income/${user._id}`)
+      .get(`https://qxtrand.onrender.com/api/user/referral-income/${user._id}`)
       .then((res) => {
         if (res.data.success) {
           setReferralData(res.data.transactions || []);

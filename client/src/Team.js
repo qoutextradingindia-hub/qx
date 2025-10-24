@@ -13,7 +13,7 @@ const Team = () => {
 
   const fetchOverview = () => {
     if (!user?._id) return;
-    axios.get(`https://startradersindia.in/api/user/referral-overview/${user._id}`)
+    axios.get(`https://qxtrand.onrender.com/api/user/referral-overview/${user._id}`)
       .then(res => {
         setOverview(res.data);
       });
@@ -23,7 +23,7 @@ const Team = () => {
     fetchOverview();
     // Poll for new join every 10s
     const interval = setInterval(() => {
-      axios.get(`https://startradersindia.in/api/user/referral-overview/${user._id}`).then(res => {
+      axios.get(`https://qxtrand.onrender.com/api/user/referral-overview/${user._id}`).then(res => {
         if (overview && res.data.referralList && res.data.referralList.length > overview.referralList.length) {
           // New join detected
           const newRef = res.data.referralList.find(r => !overview.referralList.some(o => o._id === r._id));
