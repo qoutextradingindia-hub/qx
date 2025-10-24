@@ -5,7 +5,7 @@ import API from './api';
 
 // Base URL getter function
 export const getAPIBaseURL = () => {
-  return process.env.REACT_APP_API_BASE_URL || 'https://qx-yb3z.onrender.com/api';
+  return process.env.REACT_APP_API_BASE_URL || 'https://qxtrand.onrender.com/api';
 };
 
 // Auth APIs

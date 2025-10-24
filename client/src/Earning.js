@@ -18,7 +18,7 @@ function Earning() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user._id) return;
-    axios.get(`https://qx-yb3z.onrender.com/api/user/transactions/${user._id}`)
+    axios.get(`https://qxtrand.onrender.com/api/user/transactions/${user._id}`)
       .then(function(res) {
         if (res.data.success && Array.isArray(res.data.history)) {
           let sums = {

@@ -42,7 +42,7 @@ const Dashboard = () => {
     if (!user || !user._id) return;
     // Available Funds (get user balance from admin API)
     axios
-      .get(`https://qx-yb3z.onrender.com/api/admin/user/${user._id}`)
+      .get(`https://qxtrand.onrender.com/api/admin/user/${user._id}`)
       .then(res => {
         if (res.data.success && res.data.user && typeof res.data.user.balance === 'number') {
           setAvailableFunds(res.data.user.balance);
@@ -53,7 +53,7 @@ const Dashboard = () => {
       .catch(() => setAvailableFunds(0));
     // Referral Income
     axios
-      .get(`https://qx-yb3z.onrender.com/api/user/referral-income/${user._id}`)
+      .get(`https://qxtrand.onrender.com/api/user/referral-income/${user._id}`)
       .then(res => {
         if (res.data.success && typeof res.data.totalReferralIncome === 'string') {
           setReferralIncome(parseFloat(res.data.totalReferralIncome));

@@ -6,17 +6,22 @@ const replaceInFile = (filePath) => {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
     
-    // Replace startradersindia.in with new backend URL
-    content = content.replace(/https:\/\/startradersindia\.in\/api/g, 'https://qx-yb3z.onrender.com/api');
-    content = content.replace(/http:\/\/localhost:5000\/api/g, 'https://qx-yb3z.onrender.com/api');
+    // Replace all old backend URLs with new one
+    content = content.replace(/https:\/\/qx-yb3z\.onrender\.com/g, 'https://qxtrand.onrender.com');
+    content = content.replace(/https:\/\/startraders-fullstack\.onrender\.com/g, 'https://qxtrand.onrender.com');
+    content = content.replace(/https:\/\/startradersindia\.in\/api/g, 'https://qxtrand.onrender.com/api');
+    content = content.replace(/http:\/\/localhost:5000\/api/g, 'https://qxtrand.onrender.com/api');
     
     // For registration links, keep frontend URL
-    content = content.replace(/https:\/\/startradersindia\.in\/register/g, 'https://qx-473d.onrender.com/register');
+    content = content.replace(/https:\/\/qx-yb3z\.onrender\.com\/register/g, 'https://qxtrand.onrender.com/register');
+    content = content.replace(/https:\/\/startradersindia\.in\/register/g, 'https://qxtrand.onrender.com/register');
     
     fs.writeFileSync(filePath, content, 'utf8');
     console.log(`✅ Fixed: ${filePath}`);
+    return true;
   } catch (err) {
     console.log(`❌ Error fixing ${filePath}:`, err.message);
+    return false;
   }
 };
 

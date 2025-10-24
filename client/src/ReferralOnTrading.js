@@ -12,7 +12,7 @@ const ReferralOnTrading = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user._id) return;
     setLoading(true);
-    fetch(`https://qx-yb3z.onrender.com/api/user/referral-trading-income?userId=${user._id}`)
+    fetch(`https://qxtrand.onrender.com/api/user/referral-trading-income?userId=${user._id}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
