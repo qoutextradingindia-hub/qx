@@ -21,12 +21,11 @@ const corsOptions = {
     'https://31.97.207.160',
     'https://qxtrand.onrender.com',
     'https://qx-473d.onrender.com',
-    'https://qxtrand.onrender.com',
-    '*'  // Allow all origins for now
+    'https://qxtrand.onrender.com'
   ],
   credentials: true,
   optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: [
     'Origin',
     'X-Requested-With', 
@@ -34,7 +33,10 @@ const corsOptions = {
     'Accept',
     'Authorization',
     'Cache-Control',
-    'X-Access-Token'
+    'X-Access-Token',
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Headers',
+    'Access-Control-Allow-Methods'
   ]
 };
 
@@ -50,6 +52,9 @@ app.options('*', cors(corsOptions));
 // Add security headers middleware
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-Access-Token');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   res.header('X-Powered-By', 'StarTraders API');
   next();
 });

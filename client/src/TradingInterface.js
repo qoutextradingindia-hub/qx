@@ -10,6 +10,7 @@ const TradingInterface = () => {
   const [activeTrades, setActiveTrades] = useState([]);
   const [userBalance, setUserBalance] = useState(0);
   const [priceData, setPriceData] = useState({});
+  const [priceHistory, setPriceHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
   
@@ -86,10 +87,25 @@ const TradingInterface = () => {
         if (response.data.success) {
           const updatedPrices = {};
           response.data.markets.forEach(market => {
+            const newPrice = market.currentPrice;
             updatedPrices[market.symbol] = {
-              price: market.currentPrice,
+              price: newPrice,
               change: market.priceChange
             };
+            
+            // Update price history for charts
+            setPriceHistory(prev => {
+              const symbolHistory = prev[market.symbol] || [];
+              const newHistory = [...symbolHistory, {
+                price: newPrice,
+                timestamp: Date.now()
+              }].slice(-50); // Keep last 50 points
+              
+              return {
+                ...prev,
+                [market.symbol]: newHistory
+              };
+            });
           });
           setPriceData(updatedPrices);
         }
@@ -209,6 +225,66 @@ const TradingInterface = () => {
             </div>
             <div className={`price-change ${(priceData[selectedMarket.symbol]?.change || selectedMarket.priceChange || 0) >= 0 ? 'positive' : 'negative'}`}>
               {((priceData[selectedMarket.symbol]?.change || selectedMarket.priceChange || 0) >= 0 ? '+' : '')}{(priceData[selectedMarket.symbol]?.change || selectedMarket.priceChange || 0).toFixed(2)}%
+            </div>
+            
+            {/* Simple Price Chart */}
+            <div className="price-chart">
+              <svg width="100%" height="150" style={{ background: '#1a1a1a', borderRadius: '8px' }}>
+                {priceHistory[selectedMarket.symbol] && priceHistory[selectedMarket.symbol].length > 1 && (
+                  <>
+                    {/* Chart Line */}
+                    <polyline
+                      fill="none"
+                      stroke="#00ff88"
+                      strokeWidth="2"
+                      points={
+                        priceHistory[selectedMarket.symbol]
+                          .map((point, index) => {
+                            const x = (index / (priceHistory[selectedMarket.symbol].length - 1)) * 100;
+                            const prices = priceHistory[selectedMarket.symbol].map(p => p.price);
+                            const minPrice = Math.min(...prices);
+                            const maxPrice = Math.max(...prices);
+                            const y = 130 - ((point.price - minPrice) / (maxPrice - minPrice)) * 110;
+                            return `${x}%,${y}`;
+                          })
+                          .join(' ')
+                      }
+                    />
+                    {/* Price points */}
+                    {priceHistory[selectedMarket.symbol].map((point, index) => {
+                      const x = (index / (priceHistory[selectedMarket.symbol].length - 1)) * 100;
+                      const prices = priceHistory[selectedMarket.symbol].map(p => p.price);
+                      const minPrice = Math.min(...prices);
+                      const maxPrice = Math.max(...prices);
+                      const y = 130 - ((point.price - minPrice) / (maxPrice - minPrice)) * 110;
+                      return (
+                        <circle
+                          key={index}
+                          cx={`${x}%`}
+                          cy={y}
+                          r="3"
+                          fill="#00ff88"
+                        />
+                      );
+                    })}
+                  </>
+                )}
+                {/* Chart Grid Lines */}
+                <defs>
+                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#333" strokeWidth="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" opacity="0.3" />
+                
+                {/* Chart Labels */}
+                <text x="10" y="20" fill="#888" fontSize="12">
+                  {selectedMarket.symbol} Live Chart
+                </text>
+                <text x="10" y="140" fill="#888" fontSize="10">
+                  Real-time Price Movement
+                </text>
+              </svg>
             </div>
           </div>
 
