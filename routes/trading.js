@@ -3,7 +3,7 @@ const router = express.Router();
 const Trade = require('../models/trade');
 const User = require('../models/user');
 const Symbol = require('../models/symbol');
-const authenticateToken = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 // Get live markets for trading
 router.get('/markets', async (req, res) => {
