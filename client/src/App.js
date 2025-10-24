@@ -6,7 +6,7 @@ import ForgotPassword from './ForgotPassword.jsx';
 import USDTDepositpage from './USDTDepositpage';
 import Login from './Login.jsx';
 import Register from './Register.jsx';
-import Dashboard from './Dashboard.js';
+import Dashboard from './Dashboard.jsx';
 import Trading from './Trading.js';
 // import ReferralIncome from './ReferralIncome.js';
 import ReferralOnTrading from './ReferralOnTrading.js';
