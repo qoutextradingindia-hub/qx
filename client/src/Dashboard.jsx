@@ -1,5 +1,6 @@
 // STAR TRADER Dashboard - Polmax style, all options same as Polmax
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Dashboard.css';
 import logo from './assets/logo.png';
 
@@ -13,14 +14,37 @@ function Dashboard() {
       </div>
       {/* Menu Bar - Polmax style, pink/purple menu */}
       <nav className="dashboard-menu polmax-menu">
-        <div className="dashboard-menu-item polmax-menu-item">DASHBOARD</div>
-        <div className="dashboard-menu-item polmax-menu-item">INVEST</div>
+        <Link to="/dashboard" className="dashboard-menu-item polmax-menu-item">DASHBOARD</Link>
+        <Link to="/binary-trading" className="dashboard-menu-item polmax-menu-item" style={{ 
+          background: 'linear-gradient(45deg, #FFD700, #FFA500)', 
+          color: '#000', 
+          fontWeight: 'bold',
+          textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+          position: 'relative'
+        }}>
+          📊 BINARY TRADING
+          <span style={{ 
+            position: 'absolute', 
+            top: '-5px', 
+            right: '-5px', 
+            background: '#ff4757', 
+            color: 'white', 
+            borderRadius: '50%', 
+            width: '20px', 
+            height: '20px', 
+            fontSize: '10px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+          }}>NEW</span>
+        </Link>
+        <Link to="/staking" className="dashboard-menu-item polmax-menu-item">INVEST</Link>
         <div className="dashboard-menu-item polmax-menu-item">AI BOT</div>
         <div className="dashboard-menu-item polmax-menu-item">PAYMENTS</div>
-        <div className="dashboard-menu-item polmax-menu-item">REFERRALS</div>
-        <div className="dashboard-menu-item polmax-menu-item">PROFIT</div>
-        <div className="dashboard-menu-item polmax-menu-item">SIGNUP REWARD</div>
-        <div className="dashboard-menu-item polmax-menu-item">SUPPORT</div>
+        <Link to="/referral" className="dashboard-menu-item polmax-menu-item">REFERRALS</Link>
+        <Link to="/earning" className="dashboard-menu-item polmax-menu-item">PROFIT</Link>
+        <Link to="/reward" className="dashboard-menu-item polmax-menu-item">SIGNUP REWARD</Link>
+        <Link to="/support" className="dashboard-menu-item polmax-menu-item">SUPPORT</Link>
         <div className="dashboard-menu-item polmax-menu-item">LOGOUT</div>
       </nav>
       {/* Refer & Earn Section */}
@@ -34,6 +58,37 @@ function Dashboard() {
         <div className="dashboard-media-link">
           <button className="dashboard-social-btn">INSTA</button>
           <button className="dashboard-social-btn">WA</button>
+        </div>
+      </div>
+
+      {/* 🎯 NEW: Binary Trading Quick Access Card */}
+      <div className="dashboard-section" style={{ 
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+        borderRadius: '15px', 
+        padding: '20px', 
+        margin: '20px 0',
+        textAlign: 'center',
+        color: 'white'
+      }}>
+        <div style={{ fontSize: '48px', marginBottom: '15px' }}>📊</div>
+        <h2 style={{ margin: '0 0 10px 0', fontSize: '24px' }}>Binary Trading Platform</h2>
+        <p style={{ margin: '0 0 20px 0', opacity: '0.9' }}>Trade cryptocurrencies, forex & indices with 30-second to 10-minute expiry times</p>
+        <Link to="/binary-trading" style={{
+          display: 'inline-block',
+          background: 'linear-gradient(45deg, #FFD700, #FFA500)',
+          color: '#000',
+          padding: '12px 30px',
+          borderRadius: '25px',
+          textDecoration: 'none',
+          fontWeight: 'bold',
+          fontSize: '16px',
+          boxShadow: '0 4px 15px rgba(255, 215, 0, 0.3)',
+          transition: 'transform 0.3s ease'
+        }} onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.target.style.transform = 'scale(1)'}>
+          🚀 START TRADING NOW
+        </Link>
+        <div style={{ marginTop: '15px', fontSize: '14px', opacity: '0.8' }}>
+          ✅ Live prices • ✅ Instant results • ✅ 80%+ payout
         </div>
       </div>
       {/* My Referral & My Business Section */}
