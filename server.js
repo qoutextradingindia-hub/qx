@@ -120,8 +120,16 @@ app.post('/api/admin/upload-qr', upload.single('qr'), async (req, res) => {
 // MongoDB Connection
 const mongoUri = process.env.MONGO_URI || 'mongodb+srv://Lucky1616:Lucky9999@cluster0.kcrnhab.mongodb.net/Lucky1616?retryWrites=true&w=majority';
 
-console.log("🔍 Attempting to connect to MongoDB...");
-console.log("📋 Connection string:", mongoUri ? mongoUri.substring(0, 20) + "..." : "UNDEFINED");
+// Debug logging
+console.log("🔍 Environment check:");
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
+console.log("Using connection string:", mongoUri ? "✅ Valid" : "❌ Invalid");
+
+if (!mongoUri || mongoUri === 'undefined') {
+  console.error("❌ CRITICAL: No valid MongoDB URI found!");
+  console.log("📋 Using fallback connection string");
+}
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
@@ -130,7 +138,7 @@ mongoose.connect(mongoUri, {
 .then(() => console.log("✅ MongoDB connected successfully"))
 .catch((err) => {
   console.log("❌ MongoDB connection error:", err.message);
-  console.log("🔍 Full error:", err);
+  console.log("🔍 Connection string used:", mongoUri ? mongoUri.substring(0, 20) + "..." : "UNDEFINED");
 });
 
 // Import models from models folder
