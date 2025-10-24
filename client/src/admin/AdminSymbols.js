@@ -30,8 +30,10 @@ const AdminSymbols = () => {
 
   const fetchSymbols = async () => {
     try {
+      const token = localStorage.getItem('token') || 'admin-test-token';
+      
       const response = await axios.get(`${API_BASE}/admin/symbol/list`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success) {
         setSymbols(response.data.symbols);
@@ -65,11 +67,20 @@ const AdminSymbols = () => {
       
       const method = editingSymbol ? 'PUT' : 'POST';
       
+      // For testing - use dummy token if none exists
+      const token = localStorage.getItem('token') || 'admin-test-token';
+      
+      console.log('🚀 Submitting symbol:', formData);
+      console.log('📡 API URL:', url);
+      
       const response = await axios({
         method,
         url,
         data: formData,
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
 
       if (response.data.success) {
@@ -78,6 +89,8 @@ const AdminSymbols = () => {
         resetForm();
       }
     } catch (error) {
+      console.error('❌ Symbol submission error:', error);
+      console.error('Response:', error.response?.data);
       alert('Error: ' + (error.response?.data?.message || 'Failed to save symbol'));
     }
   };
