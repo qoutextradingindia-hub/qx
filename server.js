@@ -20,6 +20,7 @@ const corsOptions = {
     'http://31.97.207.160',
     'https://31.97.207.160',
     'https://qxtrand.onrender.com',
+    'https://qx-473d.onrender.com',
     'https://qx-yb3z.onrender.com'
   ],
   credentials: true,
