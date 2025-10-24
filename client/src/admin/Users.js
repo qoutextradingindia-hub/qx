@@ -8,7 +8,7 @@ const Users = () => {
 
   useEffect(() => {
     axios
-      .get('https://qx-yb3z.onrender.com/api/admin/users')
+      .get('https://qxtrand.onrender.com/api/admin/users')
       .then((res) => {
         console.log('API Response:', res.data);
         if (res.data.success) {

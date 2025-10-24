@@ -19,7 +19,7 @@ const corsOptions = {
     'https://www.startradersindia.in',
     'http://31.97.207.160',
     'https://31.97.207.160',
-    'https://qx-473d.onrender.com',
+    'https://qxtrand.onrender.com',
     'https://qx-yb3z.onrender.com'
   ],
   credentials: true,
@@ -118,12 +118,20 @@ app.post('/api/admin/upload-qr', upload.single('qr'), async (req, res) => {
 });
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
+const mongoUri = process.env.MONGO_URI || 'mongodb+srv://Lucky1616:Lucky9999@cluster0.kcrnhab.mongodb.net/Lucky1616?retryWrites=true&w=majority';
+
+console.log("🔍 Attempting to connect to MongoDB...");
+console.log("📋 Connection string:", mongoUri ? mongoUri.substring(0, 20) + "..." : "UNDEFINED");
+
+mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => console.log("❌ MongoDB error:", err));
+.then(() => console.log("✅ MongoDB connected successfully"))
+.catch((err) => {
+  console.log("❌ MongoDB connection error:", err.message);
+  console.log("🔍 Full error:", err);
+});
 
 // Import models from models folder
 const User = require('./models/user');

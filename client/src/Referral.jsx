@@ -51,12 +51,12 @@ const Referral = () => {
             <input
               type="text"
               readOnly
-              value={`https://qx-473d.onrender.com/register?ref=${user?._id}`}
+              value={`https://qxtrand.onrender.com/register?ref=${user?._id}`}
               className="border px-3 py-2 w-full rounded text-sm text-gray-800"
             />
             <button
               onClick={() => {
-                navigator.clipboard.writeText(`https://qx-473d.onrender.com/register?ref=${user?._id}`);
+                navigator.clipboard.writeText(`https://qxtrand.onrender.com/register?ref=${user?._id}`);
                 alert("Referral link copied!");
               }}
               className="ml-2 bg-purple-600 text-white px-3 py-2 rounded text-sm"
@@ -78,12 +78,12 @@ const Referral = () => {
           <input
             type="text"
             readOnly
-            value={`https://qx-473d.onrender.com/register?ref=${user?._id}`}
+            value={`https://qxtrand.onrender.com/register?ref=${user?._id}`}
             className="border px-3 py-2 w-full rounded text-sm text-gray-800"
           />
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`https://qx-473d.onrender.com/register?ref=${user?._id}`);
+              navigator.clipboard.writeText(`https://qxtrand.onrender.com/register?ref=${user?._id}`);
               alert("Referral link copied!");
             }}
             className="ml-2 bg-purple-600 text-white px-3 py-2 rounded text-sm"

@@ -69,7 +69,7 @@ const Dashboard = () => {
   // Get user and referralCode safely
   const user = JSON.parse(localStorage.getItem('user'));
   const referralCode = user && user.referralCode ? user.referralCode : '';
-  const referralLink = referralCode ? `https://qx-473d.onrender.com/register?ref=${referralCode}` : '';
+  const referralLink = referralCode ? `https://qxtrand.onrender.com/register?ref=${referralCode}` : '';
 
   // Copy referral link to clipboard
   const [copied, setCopied] = useState(false);
