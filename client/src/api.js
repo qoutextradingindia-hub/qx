@@ -2,11 +2,11 @@ import axios from 'axios';
 
 // Get base URL - Always use VPS URL for production
 const getBaseURL = () => {
-  // For local development, use localhost:5000
-  return 'http://localhost:5000/api';
+  // For production deployment, use live backend URL
+  return 'https://qx-yb3z.onrender.com/api';
   
-  // For production deployment, use this instead:
-  // return 'https://startradersindia.in/api';
+  // For local development, use this instead:
+  // return 'http://localhost:5000/api';
 };
 
 // Centralized API instance for all backend calls
