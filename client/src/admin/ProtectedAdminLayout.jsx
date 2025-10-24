@@ -33,6 +33,23 @@ const ProtectedAdminLayout = () => {
               📊 Binary Trading
             </Link>
           </li>
+
+          {/* 🚀 Market Management - Blue Highlighted */}
+          <li style={{ marginBottom: '8px' }}>
+            <Link to="/admin/markets" style={{ 
+              color: 'white', 
+              backgroundColor: '#00d2ff', 
+              fontWeight: 'bold',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              display: 'block',
+              textAlign: 'center',
+              boxShadow: '0 2px 8px rgba(0, 210, 255, 0.3)'
+            }}>
+              🚀 Market Management
+            </Link>
+          </li>
           
           <li><Link to="/admin/users" style={{ color: 'white', display: 'block', padding: '8px 0', textDecoration: 'none' }}> Users</Link></li>
           <li><Link to="/admin/deposits" style={{ color: 'white', display: 'block', padding: '8px 0', textDecoration: 'none' }}> Deposits</Link></li>

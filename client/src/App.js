@@ -40,6 +40,7 @@ import AdminLogin from './admin/AdminLogin';
 import TradingIncome from './admin/TradingIncome';
 import ReferralSettingsAdmin from './admin/ReferralSettings';
 import AdminSymbols from './admin/AdminSymbols';
+import AdminMarkets from './AdminMarkets.jsx';
 import TradingInterface from './TradingInterface';
 import TransactionHistory from './TransactionHistory.jsx';
 // import logo from './assets/logo.png';
@@ -80,6 +81,7 @@ const App = () => {
           <Route path="support" element={<AdminSupport />} />
           <Route path="trading-income" element={<TradingIncome />} /> {/* ✅ Added Route */}
           <Route path="symbols" element={<AdminSymbols />} /> {/* 🎯 Binary Trading Symbols */}
+          <Route path="markets" element={<AdminMarkets />} /> {/* 🚀 Market Management */}
           <Route path="referral-settings" element={<ReferralSettingsAdmin />} /> {/* ReferralSettingsAdmin का Route */}
         </Route>
 

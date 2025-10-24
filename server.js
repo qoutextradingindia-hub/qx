@@ -74,6 +74,10 @@ app.use(userReferralRouter);
 const adminSymbolsRouter = require('./routes/adminSymbols');
 app.use('/api/admin/symbol', adminSymbolsRouter);
 
+// Admin Panel API Routes
+const adminRouter = require('./routes/admin');
+app.use('/api/admin', adminRouter);
+
 // User Market API routes
 const userMarketRouter = require('./routes/userMarket');
 
