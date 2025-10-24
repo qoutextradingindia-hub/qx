@@ -262,349 +262,414 @@ const TradingInterface = () => {
   }
 
   return (
-    <div className="quotex-trading-interface" style={{
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+    <div style={{
+      background: '#0a0a0a',
       minHeight: '100vh',
       color: 'white',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Arial, sans-serif',
+      display: 'flex',
+      flexDirection: 'column'
     }}>
-      {/* Top Bar */}
+      {/* Top Bar - Quotex Style */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '10px 20px',
-        background: 'rgba(0,0,0,0.3)',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
+        padding: '8px 15px',
+        background: '#1a1a1a',
+        borderBottom: '1px solid #333'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ 
             background: '#4CAF50', 
-            padding: '5px 10px', 
-            borderRadius: '5px',
-            fontSize: '12px',
+            padding: '3px 8px', 
+            borderRadius: '3px',
+            fontSize: '11px',
             fontWeight: 'bold'
           }}>
             🟢 LIVE ACCOUNT
           </div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
+          <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
             ${userBalance.toFixed(2)}
           </div>
+          <button style={{
+            background: '#4CAF50',
+            border: 'none',
+            padding: '5px 10px',
+            borderRadius: '3px',
+            color: 'white',
+            fontSize: '12px',
+            fontWeight: 'bold'
+          }}>
+            Deposit
+          </button>
         </div>
-        <div style={{ fontSize: '14px', color: '#888' }}>
-          🕐 {currentTime.toLocaleTimeString('en-US', { 
+        <div style={{ fontSize: '12px', color: '#888', display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <div style={{ width: '8px', height: '8px', background: '#4CAF50', borderRadius: '50%' }}></div>
+          {currentTime.toLocaleTimeString('en-US', { 
             hour12: false, 
             hour: '2-digit', 
             minute: '2-digit', 
             second: '2-digit' 
           })} UTC+1
+          <span style={{ fontSize: '14px', marginLeft: '10px' }}>ℹ️</span>
         </div>
       </div>
 
-      {/* Main Trading Area */}
-      <div style={{ display: 'flex', height: 'calc(100vh - 60px)' }}>
-        
-        {/* Chart Area */}
-        <div style={{ 
-          flex: '1', 
-          padding: '20px',
-          background: 'linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)'
-        }}>
-          {selectedMarket ? (
-            <>
-              {/* Market Info */}
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '15px',
-                marginBottom: '20px'
-              }}>
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '10px'
-                }}>
-                  <span style={{ fontSize: '24px' }}>🇦🇺🇯🇵</span>
-                  <div>
-                    <div style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                      {selectedMarket.symbol}
-                    </div>
-                    <div style={{ 
-                      fontSize: '14px', 
-                      color: selectedMarket.payoutPercent >= 80 ? '#4CAF50' : '#FFC107'
-                    }}>
-                      {selectedMarket.payoutPercent}%
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Professional Candlestick Chart */}
-              <div style={{
-                background: '#0a0a0a',
-                borderRadius: '10px',
-                padding: '15px',
-                height: '400px',
-                position: 'relative',
-                border: '1px solid #333'
-              }}>
-                {/* Chart Grid and Candles */}
-                <svg width="100%" height="100%" style={{ overflow: 'visible' }}>
-                  {/* Grid Lines */}
-                  <defs>
-                    <pattern id="grid" width="40" height="30" patternUnits="userSpaceOnUse">
-                      <path d="M 40 0 L 0 0 0 30" fill="none" stroke="#222" strokeWidth="1"/>
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill="url(#grid)" opacity="0.3" />
-                  
-                  {/* Price Scale Lines */}
-                  {[...Array(8)].map((_, i) => {
-                    const y = (i + 1) * 45;
-                    const price = candleData.length > 0 ? 
-                      (Math.min(...candleData.map(c => c.low)) + 
-                       (Math.max(...candleData.map(c => c.high)) - Math.min(...candleData.map(c => c.low))) * 
-                       (1 - i / 7)).toFixed(3) : '99.350';
-                    return (
-                      <g key={i}>
-                        <line x1="0" y1={y} x2="100%" y2={y} stroke="#333" strokeWidth="1" strokeDasharray="5,5"/>
-                        <text x="98%" y={y - 5} fill="#888" fontSize="12" textAnchor="end">
-                          {price}
-                        </text>
-                      </g>
-                    );
-                  })}
-                  
-                  {/* Time Markers */}
-                  {candleData.slice(-10).map((candle, index) => {
-                    const x = (index / 9) * 90 + 5;
-                    const time = new Date(candle.time).toLocaleTimeString('en-US', { 
-                      hour12: false, 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    });
-                    return (
-                      <text 
-                        key={index} 
-                        x={`${x}%`} 
-                        y="95%" 
-                        fill="#888" 
-                        fontSize="10" 
-                        textAnchor="middle"
-                      >
-                        {time}
-                      </text>
-                    );
-                  })}
-                  
-                  {/* Candlesticks */}
-                  {candleData.slice(-10).map((candle, index) => {
-                    if (candleData.length === 0) return null;
-                    
-                    const x = (index / 9) * 90 + 5;
-                    const minPrice = Math.min(...candleData.map(c => c.low));
-                    const maxPrice = Math.max(...candleData.map(c => c.high));
-                    const priceRange = maxPrice - minPrice;
-                    
-                    const highY = 85 - ((candle.high - minPrice) / priceRange) * 70;
-                    const lowY = 85 - ((candle.low - minPrice) / priceRange) * 70;
-                    const openY = 85 - ((candle.open - minPrice) / priceRange) * 70;
-                    const closeY = 85 - ((candle.close - minPrice) / priceRange) * 70;
-                    
-                    const isGreen = candle.close > candle.open;
-                    const bodyTop = Math.min(openY, closeY);
-                    const bodyHeight = Math.abs(closeY - openY);
-                    
-                    return (
-                      <g key={index}>
-                        {/* Wick */}
-                        <line
-                          x1={`${x}%`}
-                          y1={`${highY}%`}
-                          x2={`${x}%`}
-                          y2={`${lowY}%`}
-                          stroke={isGreen ? '#4CAF50' : '#F44336'}
-                          strokeWidth="1"
-                        />
-                        {/* Body */}
-                        <rect
-                          x={`${x - 1.5}%`}
-                          y={`${bodyTop}%`}
-                          width="3%"
-                          height={`${Math.max(bodyHeight, 0.5)}%`}
-                          fill={isGreen ? '#4CAF50' : '#F44336'}
-                          stroke={isGreen ? '#4CAF50' : '#F44336'}
-                          strokeWidth="1"
-                        />
-                      </g>
-                    );
-                  })}
-                  
-                  {/* Trade Start/End Markers */}
-                  {tradeStartTime && (
-                    <>
-                      <line x1="20%" y1="10%" x2="20%" y2="90%" stroke="#FFC107" strokeWidth="2" strokeDasharray="5,5"/>
-                      <text x="20%" y="8%" fill="#FFC107" fontSize="10" textAnchor="middle">
-                        Beginning of trade
-                      </text>
-                      <line x1="80%" y1="10%" x2="80%" y2="90%" stroke="#FFC107" strokeWidth="2" strokeDasharray="5,5"/>
-                      <text x="80%" y="8%" fill="#FFC107" fontSize="10" textAnchor="middle">
-                        End of trade
-                      </text>
-                    </>
-                  )}
-                </svg>
-              </div>
-            </>
-          ) : (
-            <div style={{ 
-              textAlign: 'center', 
-              paddingTop: '100px',
-              color: '#888'
+      {/* Main Chart Area - Full Width */}
+      <div style={{ 
+        flex: 1,
+        background: '#0f0f0f',
+        position: 'relative',
+        height: '60vh'
+      }}>
+        {selectedMarket && (
+          <>
+            {/* Chart Container */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              padding: '10px'
             }}>
-              Select a market to start trading
+              {/* Professional Candlestick Chart - Quotex Style */}
+              <svg width="100%" height="100%" style={{ background: '#0a0a0a' }}>
+                {/* Horizontal Grid Lines */}
+                {[...Array(8)].map((_, i) => {
+                  const y = (i + 1) * 12.5;
+                  const price = candleData.length > 0 ? 
+                    (Math.min(...candleData.map(c => c.low)) + 
+                     (Math.max(...candleData.map(c => c.high)) - Math.min(...candleData.map(c => c.low))) * 
+                     (1 - i / 7)).toFixed(3) : (99.300 + i * 0.010).toFixed(3);
+                  return (
+                    <g key={i}>
+                      <line 
+                        x1="0" 
+                        y1={`${y}%`} 
+                        x2="100%" 
+                        y2={`${y}%`} 
+                        stroke="#1a1a1a" 
+                        strokeWidth="1"
+                      />
+                      <text 
+                        x="96%" 
+                        y={`${y - 1}%`} 
+                        fill="#666" 
+                        fontSize="11" 
+                        textAnchor="end"
+                      >
+                        {price}
+                      </text>
+                    </g>
+                  );
+                })}
+                
+                {/* Vertical Grid Lines */}
+                {[...Array(12)].map((_, i) => {
+                  const x = (i + 1) * 8.33;
+                  return (
+                    <line 
+                      key={i}
+                      x1={`${x}%`} 
+                      y1="0" 
+                      x2={`${x}%`} 
+                      y2="100%" 
+                      stroke="#1a1a1a" 
+                      strokeWidth="1"
+                    />
+                  );
+                })}
+                
+                {/* Time Labels at Bottom */}
+                {candleData.slice(-6).map((candle, index) => {
+                  const x = 20 + (index * 15);
+                  const time = new Date(candle.time).toLocaleTimeString('en-US', { 
+                    hour12: false, 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                  });
+                  return (
+                    <text 
+                      key={index} 
+                      x={`${x}%`} 
+                      y="95%" 
+                      fill="#666" 
+                      fontSize="10" 
+                      textAnchor="middle"
+                    >
+                      {time}
+                    </text>
+                  );
+                })}
+                
+                {/* Professional Candlesticks */}
+                {candleData.slice(-20).map((candle, index) => {
+                  if (candleData.length === 0) return null;
+                  
+                  const x = 10 + (index * 4);
+                  const minPrice = Math.min(...candleData.map(c => c.low));
+                  const maxPrice = Math.max(...candleData.map(c => c.high));
+                  const priceRange = maxPrice - minPrice || 0.001;
+                  
+                  const highY = 15 + ((maxPrice - candle.high) / priceRange) * 70;
+                  const lowY = 15 + ((maxPrice - candle.low) / priceRange) * 70;
+                  const openY = 15 + ((maxPrice - candle.open) / priceRange) * 70;
+                  const closeY = 15 + ((maxPrice - candle.close) / priceRange) * 70;
+                  
+                  const isGreen = candle.close > candle.open;
+                  const bodyTop = Math.min(openY, closeY);
+                  const bodyHeight = Math.abs(closeY - openY) || 0.5;
+                  
+                  return (
+                    <g key={index}>
+                      {/* Candle Wick */}
+                      <line
+                        x1={`${x}%`}
+                        y1={`${highY}%`}
+                        x2={`${x}%`}
+                        y2={`${lowY}%`}
+                        stroke={isGreen ? '#4CAF50' : '#F44336'}
+                        strokeWidth="1"
+                      />
+                      {/* Candle Body */}
+                      <rect
+                        x={`${x - 1}%`}
+                        y={`${bodyTop}%`}
+                        width="2%"
+                        height={`${bodyHeight}%`}
+                        fill={isGreen ? '#4CAF50' : '#F44336'}
+                        stroke={isGreen ? '#4CAF50' : '#F44336'}
+                        strokeWidth="1"
+                      />
+                    </g>
+                  );
+                })}
+                
+                {/* Trade Start/End Markers - Quotex Style */}
+                <g>
+                  <line x1="25%" y1="10%" x2="25%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
+                  <text x="25%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
+                    Beginning of trade
+                  </text>
+                  <line x1="75%" y1="10%" x2="75%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
+                  <text x="75%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
+                    End of trade
+                  </text>
+                  <text x="50%" y="92%" fill="#FFC107" fontSize="9" textAnchor="middle">
+                    00:46
+                  </text>
+                </g>
+              </svg>
             </div>
-          )}
+          </>
+        )}
+      </div>
+
+      {/* Bottom Trading Panel - Quotex Style */}
+      <div style={{ 
+        background: '#1a1a1a',
+        padding: '15px',
+        borderTop: '1px solid #333'
+      }}>
+        {/* Symbol Selector */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          marginBottom: '15px',
+          gap: '10px'
+        }}>
+          <span style={{ fontSize: '20px' }}>🇦🇺🇯🇵</span>
+          <select 
+            value={selectedMarket?.symbol || ''}
+            onChange={(e) => {
+              const market = markets.find(m => m.symbol === e.target.value);
+              setSelectedMarket(market);
+            }}
+            style={{
+              background: '#333',
+              color: 'white',
+              border: '1px solid #555',
+              borderRadius: '5px',
+              padding: '8px',
+              fontSize: '14px',
+              fontWeight: 'bold'
+            }}
+          >
+            {markets.map(market => (
+              <option key={market.symbol} value={market.symbol}>
+                {market.symbol}
+              </option>
+            ))}
+          </select>
+          <div style={{ 
+            background: '#FF9800', 
+            color: 'black', 
+            padding: '3px 8px', 
+            borderRadius: '3px',
+            fontSize: '12px',
+            fontWeight: 'bold'
+          }}>
+            {selectedMarket?.payoutPercent || 87}%
+          </div>
+          <div style={{ fontSize: '12px', color: '#888', marginLeft: 'auto' }}>
+            PENDING TRADE 🔵
+          </div>
         </div>
 
-        {/* Trading Panel */}
+        {/* Trade Controls Row */}
         <div style={{ 
-          width: '300px', 
-          background: 'rgba(0,0,0,0.4)',
-          padding: '20px',
-          borderLeft: '1px solid rgba(255,255,255,0.1)'
+          display: 'flex', 
+          gap: '15px', 
+          alignItems: 'center',
+          marginBottom: '15px'
         }}>
-          {/* Market Selector */}
-          <div style={{ marginBottom: '20px' }}>
-            <h3 style={{ marginBottom: '10px', fontSize: '16px' }}>Markets</h3>
-            <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-              {markets.map(market => (
-                <div 
-                  key={market.symbol}
-                  onClick={() => setSelectedMarket(market)}
-                  style={{
-                    padding: '10px',
-                    margin: '5px 0',
-                    background: selectedMarket?.symbol === market.symbol ? 
-                      'rgba(76, 175, 80, 0.2)' : 'rgba(255,255,255,0.1)',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    border: selectedMarket?.symbol === market.symbol ? 
-                      '1px solid #4CAF50' : '1px solid transparent'
-                  }}
-                >
-                  <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
-                    {market.symbol}
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#888' }}>
-                    {market.name}
-                  </div>
-                </div>
-              ))}
+          {/* Time */}
+          <div>
+            <div style={{ fontSize: '12px', color: '#888', marginBottom: '5px' }}>Time</div>
+            <input
+              type="text"
+              value={`${Math.floor(expiryTime / 60)}:${(expiryTime % 60).toString().padStart(2, '0')}`}
+              onChange={(e) => {
+                const [min, sec] = e.target.value.split(':');
+                setExpiryTime(parseInt(min) * 60 + parseInt(sec || 0));
+              }}
+              style={{
+                background: '#333',
+                border: '1px solid #555',
+                borderRadius: '5px',
+                padding: '8px',
+                color: 'white',
+                width: '80px',
+                textAlign: 'center'
+              }}
+            />
+          </div>
+
+          {/* Investment */}
+          <div>
+            <div style={{ fontSize: '12px', color: '#888', marginBottom: '5px' }}>Investment</div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <input
+                type="number"
+                value={tradeAmount}
+                onChange={(e) => setTradeAmount(Number(e.target.value))}
+                style={{
+                  background: '#333',
+                  border: '1px solid #555',
+                  borderRadius: '5px 0 0 5px',
+                  padding: '8px',
+                  color: 'white',
+                  width: '60px',
+                  textAlign: 'center'
+                }}
+              />
+              <span style={{ 
+                background: '#555', 
+                padding: '8px 10px', 
+                borderRadius: '0 5px 5px 0',
+                fontSize: '14px'
+              }}>$</span>
+              <button style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                fontSize: '18px',
+                marginLeft: '10px'
+              }}>+</button>
+            </div>
+            <div style={{ fontSize: '10px', color: '#888', marginTop: '2px' }}>
+              SWITCH
             </div>
           </div>
 
-          {/* Trade Controls */}
-          {selectedMarket && (
-            <>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>
-                  Time
-                </label>
-                <input
-                  type="number"
-                  value={expiryTime}
-                  onChange={(e) => setExpiryTime(Number(e.target.value))}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '5px',
-                    color: 'white',
-                    fontSize: '16px'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>
-                  Investment
-                </label>
-                <input
-                  type="number"
-                  value={tradeAmount}
-                  onChange={(e) => setTradeAmount(Number(e.target.value))}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '5px',
-                    color: 'white',
-                    fontSize: '16px'
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '20px', textAlign: 'right' }}>
-                <div style={{ fontSize: '14px', color: '#888' }}>Payout:</div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#4CAF50' }}>
-                  {(tradeAmount * (selectedMarket.payoutPercent / 100 + 1)).toFixed(2)}$
-                </div>
-              </div>
-
-              {/* Call/Put Buttons */}
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button
-                  onClick={() => placeTrade('PUT')}
-                  disabled={placing}
-                  style={{
-                    flex: 1,
-                    padding: '15px',
-                    background: 'linear-gradient(135deg, #F44336, #D32F2F)',
-                    border: 'none',
-                    borderRadius: '10px',
-                    color: 'white',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    cursor: placing ? 'not-allowed' : 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px'
-                  }}
-                >
-                  <span style={{ fontSize: '20px' }}>↓</span>
-                  Down
-                </button>
-                
-                <button
-                  onClick={() => placeTrade('CALL')}
-                  disabled={placing}
-                  style={{
-                    flex: 1,
-                    padding: '15px',
-                    background: 'linear-gradient(135deg, #4CAF50, #388E3C)',
-                    border: 'none',
-                    borderRadius: '10px',
-                    color: 'white',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    cursor: placing ? 'not-allowed' : 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px'
-                  }}
-                >
-                  <span style={{ fontSize: '20px' }}>↑</span>
-                  Up
-                </button>
-              </div>
-            </>
-          )}
+          {/* Payout */}
+          <div style={{ marginLeft: 'auto' }}>
+            <div style={{ fontSize: '12px', color: '#888' }}>Payout:</div>
+            <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4CAF50' }}>
+              {((tradeAmount * (selectedMarket?.payoutPercent || 87)) / 100 + tradeAmount).toFixed(2)}$
+            </div>
+          </div>
         </div>
+
+        {/* Call/Put Buttons - Quotex Style */}
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            onClick={() => placeTrade('PUT')}
+            disabled={placing}
+            style={{
+              flex: 1,
+              padding: '15px',
+              background: 'linear-gradient(135deg, #F44336, #D32F2F)',
+              border: 'none',
+              borderRadius: '8px',
+              color: 'white',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: placing ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px'
+            }}
+          >
+            <span style={{ fontSize: '18px' }}>↓</span>
+            Down
+          </button>
+          
+          <button
+            onClick={() => placeTrade('CALL')}
+            disabled={placing}
+            style={{
+              flex: 1,
+              padding: '15px',
+              background: 'linear-gradient(135deg, #4CAF50, #388E3C)',
+              border: 'none',
+              borderRadius: '8px',
+              color: 'white',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: placing ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px'
+            }}
+          >
+            <span style={{ fontSize: '18px' }}>↑</span>
+            Up
+          </button>
+        </div>
+      </div>
+
+      {/* Bottom Navigation Icons */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: '10px',
+        background: '#0a0a0a',
+        borderTop: '1px solid #333'
+      }}>
+        {['📊', '❓', '👤', '💬', '⚙️'].map((icon, index) => (
+          <div key={index} style={{
+            padding: '10px',
+            fontSize: '20px',
+            opacity: index === 0 ? 1 : 0.5
+          }}>
+            {icon}
+            {index === 1 && <span style={{
+              position: 'absolute',
+              background: '#2196F3',
+              borderRadius: '50%',
+              width: '8px',
+              height: '8px',
+              marginLeft: '-5px',
+              marginTop: '-5px'
+            }}></span>}
+          </div>
+        ))}
       </div>
     </div>
   );
