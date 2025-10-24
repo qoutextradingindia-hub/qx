@@ -65,6 +65,13 @@ app.use(testMailRouter);
 const userReferralRouter = require('./routes/userReferral');
 app.use(userReferralRouter);
 
+// Binary Trading APIs
+const adminSymbolsRouter = require('./routes/adminSymbols');
+app.use('/api/admin/symbol', adminSymbolsRouter);
+
+const userMarketRouter = require('./routes/userMarket');
+app.use('/api', userMarketRouter);
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
