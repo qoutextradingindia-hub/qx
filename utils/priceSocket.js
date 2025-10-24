@@ -25,10 +25,12 @@ class PriceSocketManager {
     
     // Fallback price data for when WebSocket fails
     this.fallbackPrices = {
-      'BTCUSDT': { price: 67000, change: 2.5 },
-      'ETHUSDT': { price: 2600, change: 1.8 },
-      'BNBUSDT': { price: 590, change: 0.5 },
-      'ADAUSDT': { price: 0.45, change: -0.3 }
+      'BTCUSDT': { price: 67250.50, change: 2.8 },
+      'ETHUSDT': { price: 2650.75, change: 1.9 },
+      'BNBUSDT': { price: 598.20, change: 0.7 },
+      'ADAUSDT': { price: 0.4580, change: -0.2 },
+      'DOGEUSDT': { price: 0.1245, change: 3.2 },
+      'LINKUSDT': { price: 11.85, change: 1.1 }
     };
   }
 
@@ -108,6 +110,8 @@ class PriceSocketManager {
 
   // Load fallback prices when WebSocket fails
   loadFallbackPrices() {
+    console.log('📊 Loading fallback prices for instant trading availability...');
+    
     Object.entries(this.fallbackPrices).forEach(([symbol, data]) => {
       this.priceData[symbol] = {
         symbol: symbol,
@@ -120,28 +124,32 @@ class PriceSocketManager {
       this.broadcastPrice(symbol, this.priceData[symbol]);
     });
     
-    console.log('📊 Fallback prices loaded for', Object.keys(this.fallbackPrices).length, 'symbols');
+    console.log('✅ Fallback prices loaded for', Object.keys(this.fallbackPrices).length, 'symbols');
+    console.log('💹 Current prices:', this.priceData);
   }
 
   // Start fallback price simulation
   startFallbackPriceUpdates() {
+    console.log('🔄 Starting realistic price simulation...');
+    
     setInterval(() => {
       Object.entries(this.fallbackPrices).forEach(([symbol, baseData]) => {
-        // Simulate small price fluctuations
-        const fluctuation = (Math.random() - 0.5) * 0.02; // ±1% variation
+        // Simulate realistic price fluctuations
+        const fluctuation = (Math.random() - 0.5) * 0.01; // ±0.5% variation
         const newPrice = baseData.price * (1 + fluctuation);
+        const changeFluctuation = (Math.random() - 0.5) * 0.2; // Small change in %
         
         this.priceData[symbol] = {
           symbol: symbol,
-          price: newPrice,
-          change: baseData.change + (fluctuation * 100),
+          price: parseFloat(newPrice.toFixed(4)),
+          change: parseFloat((baseData.change + changeFluctuation).toFixed(2)),
           timestamp: Date.now(),
           source: 'fallback-simulation'
         };
         
         this.broadcastPrice(symbol, this.priceData[symbol]);
       });
-    }, 3000); // Update every 3 seconds
+    }, 2000); // Update every 2 seconds for responsive trading
   }
 
   // Reconnect Binance with exponential backoff
@@ -247,18 +255,22 @@ class PriceSocketManager {
 
   // Start all price feeds
   start() {
-    console.log('🚀 Starting Price Socket Manager with fallback support...');
+    console.log('🚀 Starting Price Socket Manager with IMMEDIATE fallback mode...');
     
-    // Try Binance WebSocket first
-    this.startBinanceSocket();
+    // Load fallback prices IMMEDIATELY
+    this.loadFallbackPrices();
+    this.startFallbackPriceUpdates();
     
-    // Always start TwelveData as backup
+    // Try Binance WebSocket in background (optional)
+    setTimeout(() => {
+      console.log('📡 Attempting Binance connection (background only)...');
+      this.startBinanceSocket();
+    }, 5000);
+    
+    // Start TwelveData as additional backup
     setTimeout(() => {
       this.startTwelveDataPolling();
-    }, 2000);
-    
-    // Load fallback prices immediately for instant availability
-    this.loadFallbackPrices();
+    }, 10000);
   }
 
   // Stop all connections
