@@ -15,10 +15,15 @@ const AdminSymbols = () => {
     icon: '',
     binanceSymbol: '',
     twelveDataSymbol: '',
+    apiEndpoint: '',
+    apiKey: '',
+    priceSource: 'FALLBACK', // BINANCE, TWELVEDATA, CUSTOM_API, FALLBACK
     minTradeAmount: 1,
     maxTradeAmount: 1000,
     expiryOptions: [30, 60, 120, 300],
-    isPopular: false
+    isPopular: false,
+    customPriceFormula: '', // For custom price calculations
+    updateInterval: 2000 // Price update interval in milliseconds
   });
 
   const API_BASE = 'https://qxtrand.onrender.com/api';
