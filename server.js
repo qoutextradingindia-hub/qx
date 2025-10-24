@@ -18,7 +18,9 @@ const corsOptions = {
     'http://www.startradersindia.in',
     'https://www.startradersindia.in',
     'http://31.97.207.160',
-    'https://31.97.207.160'
+    'https://31.97.207.160',
+    'https://qx-473d.onrender.com',
+    'https://qx-yb3z.onrender.com'
   ],
   credentials: true,
   optionsSuccessStatus: 200,
