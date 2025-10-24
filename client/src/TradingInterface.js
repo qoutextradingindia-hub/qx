@@ -3,29 +3,103 @@ import axios from 'axios';
 
 const TradingInterface = () => {
   const [markets, setMarkets] = useState([]);
-  const [selectedMarket, setSelectedMarket] = useState(null);
+  const [selectedMarket, setSelectedMarket] = useState({ symbol: 'AUDJPY', name: 'AUD/JPY', payoutPercent: 87 });
   const [tradeAmount, setTradeAmount] = useState(1);
-  const [expiryTime, setExpiryTime] = useState(60);
-  const [activeTrades, setActiveTrades] = useState([]);
+  const [expiryTime, setExpiryTime] = useState(71);
   const [userBalance, setUserBalance] = useState(1000);
-  const [priceData, setPriceData] = useState({});
   const [candleData, setCandleData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [currentPrice, setCurrentPrice] = useState(99.374);
   const [placing, setPlacing] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const priceUpdateInterval = useRef(null);
+  const chartRef = useRef(null);
   const API_BASE = process.env.REACT_APP_API_URL || 'https://qxtrand.onrender.com';
 
-  // Load markets and user data on component mount
-  useEffect(() => {
-    fetchMarkets();
-    fetchActiveTrades();
-    fetchUserBalance();
-    startPriceUpdates();
-    initializeCandleData();
+  // Generate realistic OHLC candlestick data
+  const generateCandleData = () => {
+    const now = Date.now();
+    const candles = [];
+    let price = 99.374; // Starting price like in Quotex
     
-    // Update current time every second
+    // Generate 20 historical candles (30-second intervals)
+    for (let i = 19; i >= 0; i--) {
+      const timestamp = now - (i * 30000); // 30 seconds interval
+      const variation = (Math.random() - 0.5) * 0.020; // ±0.020 variation
+      
+      const open = price;
+      const close = price + variation;
+      const high = Math.max(open, close) + Math.random() * 0.005;
+      const low = Math.min(open, close) - Math.random() * 0.005;
+      
+      candles.push({
+        timestamp,
+        open: parseFloat(open.toFixed(3)),
+        high: parseFloat(high.toFixed(3)), 
+        low: parseFloat(low.toFixed(3)),
+        close: parseFloat(close.toFixed(3)),
+        isGreen: close > open
+      });
+      
+      price = close; // Next candle starts from previous close
+    }
+    
+    setCandleData(candles);
+    setCurrentPrice(candles[candles.length - 1].close);
+  };
+
+  // Update price and candle data every 3 seconds
+  const updatePriceData = () => {
+    setCandleData(prevCandles => {
+      const now = Date.now();
+      const lastCandle = prevCandles[prevCandles.length - 1];
+      const timeDiff = now - lastCandle.timestamp;
+      
+      // Create new candle every 30 seconds
+      if (timeDiff >= 30000) {
+        const variation = (Math.random() - 0.5) * 0.015;
+        const newPrice = lastCandle.close + variation;
+        
+        const newCandle = {
+          timestamp: now,
+          open: lastCandle.close,
+          close: parseFloat(newPrice.toFixed(3)),
+          high: Math.max(lastCandle.close, newPrice) + Math.random() * 0.003,
+          low: Math.min(lastCandle.close, newPrice) - Math.random() * 0.003,
+          isGreen: newPrice > lastCandle.close
+        };
+        
+        setCurrentPrice(newCandle.close);
+        return [...prevCandles.slice(-19), newCandle]; // Keep last 20 candles
+      } else {
+        // Update current candle
+        const variation = (Math.random() - 0.5) * 0.005;
+        const newPrice = lastCandle.close + variation;
+        const updatedCandles = [...prevCandles];
+        const currentCandle = updatedCandles[updatedCandles.length - 1];
+        
+        updatedCandles[updatedCandles.length - 1] = {
+          ...currentCandle,
+          close: parseFloat(newPrice.toFixed(3)),
+          high: Math.max(currentCandle.high, newPrice),
+          low: Math.min(currentCandle.low, newPrice),
+          isGreen: newPrice > currentCandle.open
+        };
+        
+        setCurrentPrice(newPrice);
+        return updatedCandles;
+      }
+    });
+  };
+
+  // Initialize on component mount
+  useEffect(() => {
+    generateCandleData();
+    
+    // Update price every 3 seconds
+    priceUpdateInterval.current = setInterval(updatePriceData, 3000);
+    
+    // Update time every second
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -38,572 +112,458 @@ const TradingInterface = () => {
     };
   }, []);
 
-  // Fetch available markets
-  const fetchMarkets = async () => {
-    try {
-      const response = await axios.get(`${API_BASE}/api/trading/markets`);
-      if (response.data.success) {
-        setMarkets(response.data.markets);
-        if (response.data.markets.length > 0 && !selectedMarket) {
-          setSelectedMarket(response.data.markets[0]);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching markets:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Fetch active trades
-  const fetchActiveTrades = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE}/api/trading/trades/active`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (response.data.success) {
-        setActiveTrades(response.data.trades);
-      }
-    } catch (error) {
-      console.error('Error fetching active trades:', error);
-    }
-  };
-
-  // Initialize candlestick data
-  const initializeCandleData = () => {
-    const now = Date.now();
-    const initialCandles = [];
-    
-    // Generate initial 20 candles with realistic data
-    for (let i = 20; i >= 0; i--) {
-      const time = now - (i * 60000); // 1 minute intervals
-      const basePrice = 99.350;
-      const randomChange = (Math.random() - 0.5) * 0.050;
-      const open = basePrice + randomChange;
-      const close = open + (Math.random() - 0.5) * 0.020;
-      const high = Math.max(open, close) + Math.random() * 0.010;
-      const low = Math.min(open, close) - Math.random() * 0.010;
-      
-      initialCandles.push({
-        time,
-        open: parseFloat(open.toFixed(4)),
-        high: parseFloat(high.toFixed(4)),
-        low: parseFloat(low.toFixed(4)),
-        close: parseFloat(close.toFixed(4)),
-        volume: Math.random() * 1000 + 500
-      });
-    }
-    
-    setCandleData(initialCandles);
-  };
-
-  // Update candlestick data
-  const updateCandleData = (newPrice) => {
-    setCandleData(prevCandles => {
-      const now = Date.now();
-      const lastCandle = prevCandles[prevCandles.length - 1];
-      const oneMinute = 60000;
-      
-      if (now - lastCandle.time >= oneMinute) {
-        // Create new candle
-        const newCandle = {
-          time: now,
-          open: lastCandle.close,
-          high: Math.max(lastCandle.close, newPrice),
-          low: Math.min(lastCandle.close, newPrice),
-          close: newPrice,
-          volume: Math.random() * 1000 + 500
-        };
-        
-        return [...prevCandles.slice(-19), newCandle]; // Keep last 20 candles
-      } else {
-        // Update current candle
-        const updatedCandles = [...prevCandles];
-        const currentCandle = updatedCandles[updatedCandles.length - 1];
-        updatedCandles[updatedCandles.length - 1] = {
-          ...currentCandle,
-          high: Math.max(currentCandle.high, newPrice),
-          low: Math.min(currentCandle.low, newPrice),
-          close: newPrice
-        };
-        
-        return updatedCandles;
-      }
-    });
-  };
-
-  // Fetch user balance
-  const fetchUserBalance = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      // Assuming you have a user profile endpoint
-      const response = await axios.get(`${API_BASE}/api/user/profile`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (response.data.success) {
-        setUserBalance(response.data.user.walletBalance || 0);
-      }
-    } catch (error) {
-      console.error('Error fetching user balance:', error);
-    }
-  };
-
-  // Start price updates
-  const startPriceUpdates = () => {
-    priceUpdateInterval.current = setInterval(async () => {
-      try {
-        const response = await axios.get(`${API_BASE}/api/trading/markets`);
-        if (response.data.success) {
-          const updatedPrices = {};
-          response.data.markets.forEach(market => {
-            const newPrice = market.currentPrice;
-            updatedPrices[market.symbol] = {
-              price: newPrice,
-              change: market.priceChange
-            };
-            
-            // Update candlestick data for selected market
-            if (selectedMarket && market.symbol === selectedMarket.symbol) {
-              updateCandleData(newPrice);
-            }
-          });
-          setPriceData(updatedPrices);
-        }
-      } catch (error) {
-        console.error('Error updating prices:', error);
-      }
-    }, 2000); // Update every 2 seconds
-  };
-                timestamp: Date.now()
-              }].slice(-50); // Keep last 50 points
-              
-              return {
-                ...prev,
-                [market.symbol]: newHistory
-              };
-            });
-          });
-          setPriceData(updatedPrices);
-        }
-      } catch (error) {
-        console.error('Error updating prices:', error);
-      }
-    }, 2000); // Update every 2 seconds
-  };
-
-  // Place trade
-  const placeTrade = async (tradeType) => {
-    if (!selectedMarket || placing) return;
-    
-    if (tradeAmount > userBalance) {
-      alert('Insufficient balance!');
-      return;
-    }
-
+  // Place trade function
+  const placeTrade = async (direction) => {
     setPlacing(true);
+    console.log(`Placing ${direction} trade for ${tradeAmount}$ on ${selectedMarket.symbol}`);
     
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(`${API_BASE}/api/trading/trade`, {
-        symbol: selectedMarket.symbol,
-        tradeType: tradeType,
-        tradeAmount: tradeAmount,
-        expiryTime: expiryTime
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      if (response.data.success) {
-        alert(`${tradeType} trade placed successfully!`);
-        fetchActiveTrades();
-        fetchUserBalance();
-      } else {
-        alert(response.data.message || 'Error placing trade');
-      }
-    } catch (error) {
-      console.error('Error placing trade:', error);
-      alert(error.response?.data?.message || 'Error placing trade');
-    } finally {
+    // Simulate trade placement
+    setTimeout(() => {
       setPlacing(false);
-    }
+      alert(`${direction} trade placed successfully! Entry: ${currentPrice}`);
+    }, 1000);
   };
-
-  // Format currency
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 6
-    }).format(amount || 0);
-  };
-
-  // Format time remaining
-  const formatTimeRemaining = (endTime) => {
-    const now = new Date();
-    const end = new Date(endTime);
-    const diff = Math.max(0, end - now);
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
-  if (loading) {
-    return (
-      <div className="trading-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading markets...</p>
-      </div>
-    );
-  }
 
   return (
-    <div style={{
-      background: '#000000',
-      minHeight: '100vh',
-      color: 'white',
-      fontFamily: 'Arial, sans-serif',
+    <div style={{ 
+      width: '100%', 
+      height: '100vh', 
+      backgroundColor: '#1a1a2e', // Quotex dark blue-black
+      color: '#FFFFFF',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      overflow: 'hidden'
     }}>
-      {/* Top Bar - Pure Black Quotex Style */}
+      {/* Top Header - Exact Quotex Style */}
       <div style={{
+        backgroundColor: '#16213e',
+        padding: '8px 12px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '8px 15px',
-        background: '#000000',
-        borderBottom: '1px solid #333'
+        borderBottom: '1px solid #2a3441'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        {/* Left Side */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ fontSize: '20px' }}>☰</div>
           <div style={{ 
             background: '#4CAF50', 
-            padding: '3px 8px', 
-            borderRadius: '3px',
+            color: '#000',
+            padding: '2px 8px', 
+            borderRadius: '12px',
             fontSize: '11px',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '3px'
           }}>
             🟢 LIVE ACCOUNT
           </div>
-          <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
+          <div style={{ 
+            fontSize: '16px', 
+            fontWeight: 'bold',
+            color: '#FFFFFF'
+          }}>
             ${userBalance.toFixed(2)}
           </div>
-          <button style={{
-            background: '#4CAF50',
+          <select style={{
+            background: 'transparent',
             border: 'none',
-            padding: '5px 10px',
-            borderRadius: '3px',
-            color: 'white',
+            color: '#FFFFFF',
+            fontSize: '14px'
+          }}>
+            <option>▼</option>
+          </select>
+          <div style={{
+            background: '#4CAF50',
+            color: '#000',
+            padding: '4px 12px',
+            borderRadius: '4px',
             fontSize: '12px',
             fontWeight: 'bold',
             cursor: 'pointer'
           }}>
             Deposit
-          </button>
-        </div>
-        <div style={{ fontSize: '12px', color: '#888', display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <div style={{ width: '8px', height: '8px', background: '#4CAF50', borderRadius: '50%' }}></div>
-          {currentTime.toLocaleTimeString('en-US', { 
-            hour12: false, 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit' 
-          })} UTC+1
-          <span style={{ fontSize: '14px', marginLeft: '10px' }}>ℹ️</span>
-        </div>
-      </div>
-
-      {/* Main Chart Area - Pure Black Background */}
-      <div style={{ 
-        flex: 1,
-        background: '#000000',
-        position: 'relative',
-        height: '60vh'
-      }}>
-        {selectedMarket && (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            padding: '10px'
-          }}>
-            {/* Professional Candlestick Chart */}
-            <svg width="100%" height="100%" style={{ background: '#000000' }}>
-              {/* Horizontal Grid Lines */}
-              {[...Array(8)].map((_, i) => {
-                const y = (i + 1) * 12.5;
-                const price = (99.300 + i * 0.010).toFixed(3);
-                return (
-                  <g key={i}>
-                    <line 
-                      x1="0" 
-                      y1={`${y}%`} 
-                      x2="100%" 
-                      y2={`${y}%`} 
-                      stroke="#1a1a1a" 
-                      strokeWidth="1"
-                    />
-                    <text 
-                      x="96%" 
-                      y={`${y - 1}%`} 
-                      fill="#666" 
-                      fontSize="11" 
-                      textAnchor="end"
-                    >
-                      {price}
-                    </text>
-                  </g>
-                );
-              })}
-              
-              {/* Vertical Grid Lines */}
-              {[...Array(12)].map((_, i) => {
-                const x = (i + 1) * 8.33;
-                return (
-                  <line 
-                    key={i}
-                    x1={`${x}%`} 
-                    y1="0" 
-                    x2={`${x}%`} 
-                    y2="100%" 
-                    stroke="#1a1a1a" 
-                    strokeWidth="1"
-                  />
-                );
-              })}
-              
-              {/* Time Labels */}
-              {[11, 12, 13, 14, 15, 16].map((hour, index) => {
-                const x = 20 + (index * 15);
-                return (
-                  <text 
-                    key={index} 
-                    x={`${x}%`} 
-                    y="95%" 
-                    fill="#666" 
-                    fontSize="10" 
-                    textAnchor="middle"
-                  >
-                    {hour}:{(10 + index * 2).toString().padStart(2, '0')}
-                  </text>
-                );
-              })}
-              
-              {/* Professional Candlesticks */}
-              {[...Array(20)].map((_, index) => {
-                const x = 10 + (index * 4);
-                const isGreen = Math.random() > 0.5;
-                const basePrice = 99.350;
-                const variation = (Math.random() - 0.5) * 0.040;
-                
-                const open = basePrice + variation;
-                const close = open + (Math.random() - 0.5) * 0.020;
-                const high = Math.max(open, close) + Math.random() * 0.015;
-                const low = Math.min(open, close) - Math.random() * 0.015;
-                
-                const priceRange = 0.080;
-                const minPrice = 99.300;
-                
-                const highY = 15 + ((99.380 - high) / priceRange) * 70;
-                const lowY = 15 + ((99.380 - low) / priceRange) * 70;
-                const openY = 15 + ((99.380 - open) / priceRange) * 70;
-                const closeY = 15 + ((99.380 - close) / priceRange) * 70;
-                
-                const bodyTop = Math.min(openY, closeY);
-                const bodyHeight = Math.abs(closeY - openY) || 0.5;
-                
-                return (
-                  <g key={index}>
-                    {/* Wick */}
-                    <line
-                      x1={`${x}%`}
-                      y1={`${highY}%`}
-                      x2={`${x}%`}
-                      y2={`${lowY}%`}
-                      stroke={isGreen ? '#4CAF50' : '#F44336'}
-                      strokeWidth="1"
-                    />
-                    {/* Body */}
-                    <rect
-                      x={`${x - 1}%`}
-                      y={`${bodyTop}%`}
-                      width="2%"
-                      height={`${bodyHeight}%`}
-                      fill={isGreen ? '#4CAF50' : '#F44336'}
-                      stroke={isGreen ? '#4CAF50' : '#F44336'}
-                      strokeWidth="1"
-                    />
-                  </g>
-                );
-              })}
-              
-              {/* Trade Markers - Quotex Style */}
-              <g>
-                <line x1="25%" y1="10%" x2="25%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
-                <text x="25%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
-                  Beginning of trade
-                </text>
-                <line x1="75%" y1="10%" x2="75%" y2="85%" stroke="#FFC107" strokeWidth="2" strokeDasharray="3,3"/>
-                <text x="75%" y="8%" fill="#FFC107" fontSize="9" textAnchor="middle">
-                  End of trade
-                </text>
-                <text x="50%" y="92%" fill="#FFC107" fontSize="9" textAnchor="middle">
-                  00:46
-                </text>
-              </g>
-            </svg>
           </div>
-        )}
-      </div>
+          <div style={{ fontSize: '18px', marginLeft: '8px' }}>🚨</div>
+        </div>
 
-      {/* Bottom Trading Panel - Pure Black */}
-      <div style={{ 
-        background: '#000000',
-        padding: '15px',
-        borderTop: '1px solid #333'
-      }}>
-        {/* Symbol Selector */}
+        {/* Right Side */}
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
-          marginBottom: '15px',
-          gap: '10px'
+          gap: '8px',
+          fontSize: '12px',
+          color: '#888'
         }}>
-          <span style={{ fontSize: '20px' }}>🇦🇺🇯🇵</span>
-          <select 
-            value={selectedMarket?.symbol || 'AUDJPY'}
-            onChange={(e) => {
-              const market = markets.find(m => m.symbol === e.target.value);
-              setSelectedMarket(market);
-            }}
-            style={{
-              background: '#333',
-              color: 'white',
-              border: '1px solid #555',
-              borderRadius: '5px',
-              padding: '8px',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}
-          >
-            <option value="AUDJPY">AUD/JPY</option>
-            <option value="EURUSD">EUR/USD</option>
-            <option value="GBPUSD">GBP/USD</option>
-            <option value="USDJPY">USD/JPY</option>
-          </select>
+          <div style={{ 
+            width: '8px', 
+            height: '8px', 
+            background: '#4CAF50', 
+            borderRadius: '50%' 
+          }}></div>
+          <span>{currentTime.toLocaleTimeString('en-US', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit',
+            second: '2-digit'
+          })} UTC+1</span>
+          <span style={{ 
+            background: '#2196F3',
+            color: '#FFF',
+            borderRadius: '50%',
+            width: '16px',
+            height: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '10px'
+          }}>ℹ</span>
+        </div>
+      </div>
+
+      {/* Main Chart Area - Quotex Style */}
+      <div style={{ 
+        flex: 1,
+        backgroundColor: '#1a1a2e',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        
+        {/* Chart Container */}
+        <div style={{ 
+          flex: 1, 
+          position: 'relative',
+          backgroundColor: '#1a1a2e',
+          display: 'flex'
+        }}>
+          
+          {/* Main Chart Area */}
+          <div style={{ 
+            flex: 1, 
+            position: 'relative',
+            minHeight: '400px'
+          }}>
+            <svg 
+              width="100%" 
+              height="100%" 
+              style={{ backgroundColor: '#1a1a2e' }}
+              viewBox="0 0 800 400"
+            >
+              {/* Subtle Grid - Quotex Style */}
+              <defs>
+                <pattern id="quotexGrid" width="40" height="25" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 25" fill="none" stroke="#2a3441" strokeWidth="0.3"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#quotexGrid)" />
+              
+              {/* Professional Candlesticks - Enhanced */}
+              {candleData.map((candle, index) => {
+                const x = 50 + (index * 30); // Tighter spacing like Quotex
+                const chartHeight = 350;
+                const priceRange = Math.max(...candleData.map(c => c.high)) - Math.min(...candleData.map(c => c.low));
+                const minPrice = Math.min(...candleData.map(c => c.low));
+                
+                // Scale prices to chart height
+                const scalePrice = (price) => chartHeight - ((price - minPrice) / priceRange) * chartHeight + 25;
+                
+                const openY = scalePrice(candle.open);
+                const closeY = scalePrice(candle.close);
+                const highY = scalePrice(candle.high);
+                const lowY = scalePrice(candle.low);
+                
+                const isGreen = candle.close > candle.open;
+                const candleColor = isGreen ? '#4CAF50' : '#FF5252';
+                const bodyHeight = Math.abs(closeY - openY);
+                const bodyTop = Math.min(openY, closeY);
+                
+                return (
+                  <g key={index}>
+                    {/* High-Low line (wick) */}
+                    <line 
+                      x1={x} 
+                      y1={highY} 
+                      x2={x} 
+                      y2={lowY} 
+                      stroke={candleColor} 
+                      strokeWidth="1"
+                    />
+                    
+                    {/* Candle body - Quotex style */}
+                    <rect
+                      x={x - 6}
+                      y={bodyTop}
+                      width="12"
+                      height={Math.max(bodyHeight, 1)} 
+                      fill={isGreen ? '#4CAF50' : '#FF5252'}
+                      stroke={candleColor}
+                      strokeWidth="1"
+                      rx="1"
+                    />
+                  </g>
+                );
+              })}
+              
+              {/* Current Price Line - Quotex Style */}
+              <line 
+                x1="50" 
+                y1={350 - ((currentPrice - Math.min(...candleData.map(c => c.low))) / 
+                  (Math.max(...candleData.map(c => c.high)) - Math.min(...candleData.map(c => c.low)))) * 350 + 25} 
+                x2="750" 
+                y2={350 - ((currentPrice - Math.min(...candleData.map(c => c.low))) / 
+                  (Math.max(...candleData.map(c => c.high)) - Math.min(...candleData.map(c => c.low)))) * 350 + 25}
+                stroke="#FFC107" 
+                strokeWidth="1" 
+                strokeDasharray="2,2"
+              />
+              
+              {/* Time axis labels - Quotex format */}
+              {candleData.filter((_, i) => i % 5 === 0).map((candle, index) => (
+                <text 
+                  key={index}
+                  x={50 + (index * 5 * 30)} 
+                  y="390" 
+                  fill="#666" 
+                  fontSize="9" 
+                  textAnchor="middle"
+                >
+                  {new Date(candle.timestamp).toLocaleTimeString('en-US', { 
+                    hour12: false, 
+                    minute: '2-digit' 
+                  })}
+                </text>
+              ))}
+            </svg>
+          </div>
+          
+          {/* Price Scale - Quotex Style */}
+          <div style={{
+            width: '60px',
+            backgroundColor: '#1a1a2e',
+            borderLeft: '1px solid #2a3441',
+            padding: '20px 8px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+          }}>
+            {candleData.length > 0 && (() => {
+              const maxPrice = Math.max(...candleData.map(c => c.high));
+              const minPrice = Math.min(...candleData.map(c => c.low));
+              const priceSteps = 8;
+              const priceStep = (maxPrice - minPrice) / priceSteps;
+              
+              return Array.from({ length: priceSteps + 1 }, (_, i) => {
+                const price = maxPrice - (i * priceStep);
+                const isCurrentPrice = Math.abs(price - currentPrice) < priceStep / 2;
+                return (
+                  <div 
+                    key={i}
+                    style={{
+                      fontSize: '10px',
+                      color: isCurrentPrice ? '#FFC107' : '#666',
+                      textAlign: 'right',
+                      fontWeight: isCurrentPrice ? 'bold' : 'normal'
+                    }}
+                  >
+                    {price.toFixed(3)}
+                  </div>
+                );
+              });
+            })()}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Trading Panel - Exact Quotex Style */}
+      <div style={{ 
+        backgroundColor: '#16213e',
+        padding: '12px 16px',
+        borderTop: '1px solid #2a3441'
+      }}>
+        
+        {/* Symbol Row - With Flags */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          marginBottom: '12px',
+          gap: '8px'
+        }}>
+          <div style={{ fontSize: '18px' }}>🇦🇺🇯🇵</div>
+          <div style={{ 
+            fontSize: '16px', 
+            fontWeight: 'bold',
+            color: '#FFFFFF'
+          }}>
+            AUD/JPY
+          </div>
           <div style={{ 
             background: '#FF9800', 
-            color: 'black', 
-            padding: '3px 8px', 
+            color: '#000', 
+            padding: '2px 6px', 
             borderRadius: '3px',
-            fontSize: '12px',
+            fontSize: '11px',
             fontWeight: 'bold'
           }}>
             87%
           </div>
-          <div style={{ fontSize: '12px', color: '#888', marginLeft: 'auto' }}>
-            PENDING TRADE 🔵
+          <select style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#FFFFFF',
+            fontSize: '12px'
+          }}>
+            <option>▼</option>
+          </select>
+          
+          {/* PENDING TRADE indicator */}
+          <div style={{ 
+            marginLeft: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            fontSize: '11px',
+            color: '#2196F3'
+          }}>
+            <div style={{
+              background: '#2196F3',
+              borderRadius: '50%',
+              width: '8px',
+              height: '8px'
+            }}></div>
+            PENDING TRADE
           </div>
         </div>
 
-        {/* Trade Controls Row */}
+        {/* Controls Row */}
         <div style={{ 
           display: 'flex', 
-          gap: '15px', 
+          gap: '12px', 
           alignItems: 'center',
-          marginBottom: '15px'
+          marginBottom: '12px'
         }}>
+          
           {/* Time */}
           <div>
-            <div style={{ fontSize: '12px', color: '#888', marginBottom: '5px' }}>Time</div>
+            <div style={{ 
+              fontSize: '11px', 
+              color: '#888', 
+              marginBottom: '4px' 
+            }}>
+              Time
+            </div>
             <input
               type="text"
-              value="1:11"
+              value="11:43"
+              readOnly
               style={{
-                background: '#333',
-                border: '1px solid #555',
-                borderRadius: '5px',
-                padding: '8px',
-                color: 'white',
-                width: '80px',
-                textAlign: 'center'
+                background: '#2a3441',
+                border: '1px solid #3d4a5c',
+                borderRadius: '4px',
+                padding: '6px 8px',
+                color: '#FFFFFF',
+                width: '60px',
+                textAlign: 'center',
+                fontSize: '12px'
               }}
             />
           </div>
 
           {/* Investment */}
           <div>
-            <div style={{ fontSize: '12px', color: '#888', marginBottom: '5px' }}>Investment</div>
+            <div style={{ 
+              fontSize: '11px', 
+              color: '#888', 
+              marginBottom: '4px' 
+            }}>
+              Investment
+            </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <input
                 type="number"
                 value={tradeAmount}
                 onChange={(e) => setTradeAmount(Number(e.target.value))}
                 style={{
-                  background: '#333',
-                  border: '1px solid #555',
-                  borderRadius: '5px 0 0 5px',
-                  padding: '8px',
-                  color: 'white',
-                  width: '60px',
-                  textAlign: 'center'
+                  background: '#2a3441',
+                  border: '1px solid #3d4a5c',
+                  borderRadius: '4px 0 0 4px',
+                  padding: '6px 8px',
+                  color: '#FFFFFF',
+                  width: '50px',
+                  textAlign: 'center',
+                  fontSize: '12px'
                 }}
               />
-              <span style={{ 
-                background: '#555', 
-                padding: '8px 10px', 
-                borderRadius: '0 5px 5px 0',
-                fontSize: '14px'
-              }}>$</span>
+              <div style={{ 
+                background: '#3d4a5c', 
+                padding: '6px 8px', 
+                borderRadius: '0 4px 4px 0',
+                fontSize: '12px',
+                color: '#FFFFFF'
+              }}>$</div>
               <button style={{
                 background: 'transparent',
                 border: 'none',
-                color: 'white',
-                fontSize: '18px',
-                marginLeft: '10px',
+                color: '#FFFFFF',
+                fontSize: '16px',
+                marginLeft: '8px',
                 cursor: 'pointer'
               }}>+</button>
             </div>
-            <div style={{ fontSize: '10px', color: '#888', marginTop: '2px' }}>
+            <div style={{ 
+              fontSize: '9px', 
+              color: '#2196F3', 
+              marginTop: '2px',
+              textAlign: 'center'
+            }}>
               SWITCH
             </div>
           </div>
 
           {/* Payout */}
           <div style={{ marginLeft: 'auto' }}>
-            <div style={{ fontSize: '12px', color: '#888' }}>Payout:</div>
-            <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4CAF50' }}>
+            <div style={{ 
+              fontSize: '11px', 
+              color: '#888',
+              marginBottom: '2px'
+            }}>
+              Payout:
+            </div>
+            <div style={{ 
+              fontSize: '16px', 
+              fontWeight: 'bold', 
+              color: '#4CAF50' 
+            }}>
               1.87$
             </div>
           </div>
         </div>
 
-        {/* Call/Put Buttons - Quotex Style */}
-        <div style={{ display: 'flex', gap: '10px' }}>
+        {/* Trade Buttons - Exact Quotex Style */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
           <button
             onClick={() => placeTrade('PUT')}
             disabled={placing}
             style={{
               flex: 1,
-              padding: '15px',
-              background: 'linear-gradient(135deg, #F44336, #D32F2F)',
+              padding: '12px',
+              background: placing ? '#555' : 'linear-gradient(135deg, #FF5252, #E53935)',
               border: 'none',
-              borderRadius: '8px',
-              color: 'white',
-              fontSize: '16px',
-              fontWeight: 'bold',
+              borderRadius: '6px',
+              color: '#FFFFFF',
+              fontSize: '14px',
+              fontWeight: '600',
               cursor: placing ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px'
+              gap: '6px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
             }}
           >
-            <span style={{ fontSize: '18px' }}>↓</span>
+            <span style={{ fontSize: '16px' }}>↓</span>
             Down
           </button>
           
@@ -612,52 +572,69 @@ const TradingInterface = () => {
             disabled={placing}
             style={{
               flex: 1,
-              padding: '15px',
-              background: 'linear-gradient(135deg, #4CAF50, #388E3C)',
+              padding: '12px',
+              background: placing ? '#555' : 'linear-gradient(135deg, #4CAF50, #43A047)',
               border: 'none',
-              borderRadius: '8px',
-              color: 'white',
-              fontSize: '16px',
-              fontWeight: 'bold',
+              borderRadius: '6px',
+              color: '#FFFFFF',
+              fontSize: '14px',
+              fontWeight: '600',
               cursor: placing ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px'
+              gap: '6px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
             }}
           >
-            <span style={{ fontSize: '18px' }}>↑</span>
+            <span style={{ fontSize: '16px' }}>↑</span>
             Up
           </button>
         </div>
       </div>
 
-      {/* Bottom Navigation Icons - Quotex Style */}
+      {/* Bottom Navigation - Exact Quotex Icons */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        padding: '10px',
-        background: '#000000',
-        borderTop: '1px solid #333'
+        padding: '8px',
+        backgroundColor: '#16213e',
+        borderTop: '1px solid #2a3441'
       }}>
-        {['📊', '❓', '👤', '💬', '⚙️'].map((icon, index) => (
+        {[
+          { icon: '📊', active: true },
+          { icon: '❓', notification: true },
+          { icon: '👤', active: false },
+          { icon: '💬', notification: true, count: 4 },
+          { icon: '⚙️', active: false }
+        ].map((item, index) => (
           <div key={index} style={{
-            padding: '10px',
+            padding: '8px',
             fontSize: '20px',
-            opacity: index === 0 ? 1 : 0.5,
-            position: 'relative'
+            opacity: item.active ? 1 : 0.6,
+            position: 'relative',
+            cursor: 'pointer'
           }}>
-            {icon}
-            {index === 1 && <span style={{
-              position: 'absolute',
-              background: '#2196F3',
-              borderRadius: '50%',
-              width: '8px',
-              height: '8px',
-              top: '5px',
-              right: '5px'
-            }}></span>}
+            {item.icon}
+            {item.notification && (
+              <div style={{
+                position: 'absolute',
+                background: item.count ? '#2196F3' : '#FF5252',
+                borderRadius: '50%',
+                width: item.count ? '16px' : '8px',
+                height: item.count ? '16px' : '8px',
+                top: '4px',
+                right: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '10px',
+                color: '#FFF'
+              }}>
+                {item.count || ''}
+              </div>
+            )}
           </div>
         ))}
       </div>
