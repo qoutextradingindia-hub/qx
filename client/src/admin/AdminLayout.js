@@ -10,6 +10,7 @@ const AdminLayout = () => {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li><Link to="/admin/trading-income" style={{ color: 'white' }}>Trading Income</Link></li>
           <li><Link to="/admin/dashboard" style={{ color: 'white' }}>Dashboard</Link></li>
+          <li><Link to="/admin/symbols" style={{ color: 'white', fontWeight: 'bold', backgroundColor: '#FFD700', color: '#1a1a2e', padding: '8px', borderRadius: '4px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>📊 Binary Trading</Link></li>
           <li><Link to="/admin/users" style={{ color: 'white' }}>Users</Link></li>
           <li><Link to="/admin/deposits" style={{ color: 'white' }}>Deposits</Link></li>
           <li><Link to="/admin/withdrawals" style={{ color: 'white' }}>Withdrawals</Link></li>
